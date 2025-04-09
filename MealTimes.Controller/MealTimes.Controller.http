@@ -1,0 +1,6 @@
+@MealTimes.Controller_HostAddress = http://localhost:5220
+
+GET {{MealTimes.Controller_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
