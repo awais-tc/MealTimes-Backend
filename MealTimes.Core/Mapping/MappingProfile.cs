@@ -34,6 +34,18 @@ namespace MealTimes.API.Mapping
 
             CreateMap<Meal, MealCreateDto>().ReverseMap();
             CreateMap<Meal, MealUpdateDto>().ReverseMap();
+
+            //Subscription Plan
+            CreateMap<SubscriptionPlan, SubscriptionPlanDto>().ReverseMap();
+
+            // Create DTO → Domain
+            CreateMap<SubscriptionPlanCreateDto, SubscriptionPlan>();
+
+            // Update DTO → Domain
+            CreateMap<SubscriptionPlanUpdateDto, SubscriptionPlan>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<SubscriptionHistoryDto, CompanySubscriptionHistory>();
         }
     }
 }

@@ -64,7 +64,7 @@ namespace MealTimes.Service
                     PhoneNumber = dto.PhoneNumber,
                     Address = dto.Address,
                     AdminID = dto.AdminID,
-                    SubscriptionPlanID = dto.SubscriptionPlanID
+                    ActiveSubscriptionPlanID = dto.SubscriptionPlanID
                 }
             };
 

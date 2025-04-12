@@ -21,10 +21,14 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<ICorporateCompanyRepository, CorporateCompanyRepository>();
+builder.Services.AddScoped<ISubscriptionHistoryRepository, SubscriptionHistoryRepository>();
+builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMealService, MealService>();
+builder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
 
 // Helpers
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

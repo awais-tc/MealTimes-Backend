@@ -4,6 +4,7 @@ using MealTimes.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealTimes.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412114530_UpdateCorporateCompanyForSubscription")]
+    partial class UpdateCorporateCompanyForSubscription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,35 +49,6 @@ namespace MealTimes.Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Admins");
-                });
-
-            modelBuilder.Entity("MealTimes.Core.Models.CompanySubscriptionHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CorporateCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SubscribedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SubscriptionPlanID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CorporateCompanyId");
-
-                    b.HasIndex("SubscriptionPlanID");
-
-                    b.ToTable("CompanySubscriptionHistories");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.CorporateCompany", b =>
@@ -469,25 +443,6 @@ namespace MealTimes.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MealTimes.Core.Models.CompanySubscriptionHistory", b =>
-                {
-                    b.HasOne("MealTimes.Core.Models.CorporateCompany", "CorporateCompany")
-                        .WithMany()
-                        .HasForeignKey("CorporateCompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MealTimes.Core.Models.SubscriptionPlan", "SubscriptionPlan")
-                        .WithMany()
-                        .HasForeignKey("SubscriptionPlanID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CorporateCompany");
-
-                    b.Navigation("SubscriptionPlan");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.CorporateCompany", b =>
