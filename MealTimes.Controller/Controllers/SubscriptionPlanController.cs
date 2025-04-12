@@ -19,7 +19,7 @@ namespace MealTimes.API.Controllers
 
         // POST: api/MealPlan
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateMealPlan([FromBody] SubscriptionPlanCreateDto createDto)
         {
             var response = await _subscriptionPlanService.CreateSubscriptionPlanAsync(createDto);
@@ -46,7 +46,7 @@ namespace MealTimes.API.Controllers
 
         // PUT: api/MealPlan/{id}
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMealPlan(int id, [FromBody] SubscriptionPlanUpdateDto updateDto)
         {
             var response = await _subscriptionPlanService.UpdateSubscriptionPlanAsync(id, updateDto);
@@ -55,7 +55,7 @@ namespace MealTimes.API.Controllers
 
         // DELETE: api/MealPlan/{id}
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMealPlan(int id)
         {
             var response = await _subscriptionPlanService.DeleteSubscriptionPlanAsync(id);
