@@ -26,6 +26,7 @@ namespace MealTimes.Repository
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<User> Users { get; set; } // Ensure User table exists in the DbContext
         public DbSet<OrderMeal> OrderMeals { get; set; } // New join table
+        public DbSet<CompanySubscriptionHistory> CompanySubscriptionHistories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -53,9 +54,9 @@ namespace MealTimes.Repository
 
             // Corporate Company to Subscription Plan (N:1)
             modelBuilder.Entity<CorporateCompany>()
-                .HasOne(c => c.SubscriptionPlan)
+                .HasOne(c => c.ActiveSubscriptionPlan)
                 .WithMany()
-                .HasForeignKey(c => c.SubscriptionPlanID)
+                .HasForeignKey(c => c.ActiveSubscriptionPlanID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // HomeChef to Meal (1:N)

@@ -12,5 +12,4 @@ namespace MealTimes.Core.Models
 
         public int Quantity { get; set; }  // Number of times this meal is in the order
     }
-
 }

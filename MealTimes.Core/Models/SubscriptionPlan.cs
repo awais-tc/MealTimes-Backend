@@ -11,7 +11,8 @@ namespace MealTimes.Core.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SubscriptionPlanID { get; set; }
 
-        public required string PlanName { get; set; }
+        [Required]
+        public string PlanName { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
@@ -21,6 +22,13 @@ namespace MealTimes.Core.Models
         public int MealLimitPerDay { get; set; }
 
         [Required]
-        public int Duration { get; set; }
+        public int DurationInDays { get; set; }
+
+        public bool IsCustomizable { get; set; } = false;
+
+        [Required]
+        public int MaxEmployees { get; set; }
+
+        public ICollection<CorporateCompany> CompaniesUsingThisPlan { get; set; }
     }
 }
