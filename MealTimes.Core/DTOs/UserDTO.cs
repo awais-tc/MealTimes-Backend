@@ -86,8 +86,6 @@ namespace MealTimes.Core.DTOs
 
         public string Address { get; set; }
 
-        public double Rating { get; set; }
-
         public int UserID { get; set; }
     }
 

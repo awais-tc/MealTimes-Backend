@@ -25,6 +25,9 @@ namespace MealTimes.Core.Models
         public string MealCategory { get; set; }
 
         public int PreparationTime { get; set; }
+        public string? ImageUrl { get; set; }
+        public bool Availability { get; set; } = true;
+        public double Rating { get; set; } = 0.0;
 
         // Navigation Properties
 

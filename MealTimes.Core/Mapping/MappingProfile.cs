@@ -21,6 +21,19 @@ namespace MealTimes.API.Mapping
             CreateMap<EmployeeRegisterDto, Employee>();
             CreateMap<HomeChefRegisterDto, HomeChef>();
             CreateMap<CorporateCompanyRegisterDto, CorporateCompany>();
+
+            //Meal
+            CreateMap<MealCreateDto, Meal>()
+            .ForMember(dest => dest.ChefID, opt => opt.MapFrom(src => src.ChefID));
+
+            CreateMap<MealUpdateDto, Meal>()
+                .ForMember(dest => dest.MealID, opt => opt.MapFrom(src => src.MealID));
+
+            CreateMap<Meal, MealDto>()
+                .ForMember(dest => dest.ChefName, opt => opt.MapFrom(src => src.Chef.FullName));  // Assuming Chef is a related entity
+
+            CreateMap<Meal, MealCreateDto>().ReverseMap();
+            CreateMap<Meal, MealUpdateDto>().ReverseMap();
         }
     }
 }
