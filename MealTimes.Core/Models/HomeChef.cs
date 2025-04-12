@@ -21,7 +21,7 @@ namespace MealTimes.Core.Models
 
         public required string Address { get; set; }
 
-        public double Rating { get; set; }
+        public double Rating { get; set; } = 0.0;
 
         public int UserID { get; set; }
         [ForeignKey("UserID")]
