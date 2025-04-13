@@ -16,18 +16,35 @@ namespace MealTimes.Core.Models
         public DateTime OrderDate { get; set; }
 
         [Required]
-        public string DeliveryStatus { get; set; }
+        public DeliveryStatus DeliveryStatus { get; set; }  // Enum
 
         [Required]
-        public string PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }    // Enum
 
-        // Navigation Properties
+        // Navigation
         public Employee Employee { get; set; }
         public HomeChef Chef { get; set; }
-
         public ICollection<OrderMeal> OrderMeals { get; set; }
-        public ThirdPartyDeliveryService ThirdPartyDeliveryService { get; set; }
-        public ICollection<Feedback> Feedbacks { get; set; }
-        public Payment Payment { get; set; }
+
+        public ThirdPartyDeliveryService? ThirdPartyDeliveryService { get; set; }
+        public ICollection<Feedback>? Feedbacks { get; set; }
+        public Payment? Payment { get; set; }
     }
+
+    public enum PaymentStatus
+    {
+        Pending,
+        Succeeded,
+        Failed
+    }
+
+    public enum DeliveryStatus
+    {
+        Pending,
+        Preparing,
+        ReadyForPickup,
+        InTransit,
+        Delivered
+    }
+
 }

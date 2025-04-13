@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MealTimes.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class initaiCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,9 @@ namespace MealTimes.Repository.Migrations
                     PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MealLimitPerDay = table.Column<int>(type: "int", nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: false)
+                    DurationInDays = table.Column<int>(type: "int", nullable: false),
+                    IsCustomizable = table.Column<bool>(type: "bit", nullable: false),
+                    MaxEmployees = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,8 +100,11 @@ namespace MealTimes.Repository.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdminID = table.Column<int>(type: "int", nullable: false),
-                    SubscriptionPlanID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    ActiveSubscriptionPlanID = table.Column<int>(type: "int", nullable: true),
+                    PlanStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PlanEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    SubscriptionPlanID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -111,11 +116,16 @@ namespace MealTimes.Repository.Migrations
                         principalColumn: "AdminID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CorporateCompanies_SubscriptionPlans_SubscriptionPlanID",
-                        column: x => x.SubscriptionPlanID,
+                        name: "FK_CorporateCompanies_SubscriptionPlans_ActiveSubscriptionPlanID",
+                        column: x => x.ActiveSubscriptionPlanID,
                         principalTable: "SubscriptionPlans",
                         principalColumn: "SubscriptionPlanID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CorporateCompanies_SubscriptionPlans_SubscriptionPlanID",
+                        column: x => x.SubscriptionPlanID,
+                        principalTable: "SubscriptionPlans",
+                        principalColumn: "SubscriptionPlanID");
                     table.ForeignKey(
                         name: "FK_CorporateCompanies_Users_UserID",
                         column: x => x.UserID,
@@ -135,7 +145,10 @@ namespace MealTimes.Repository.Migrations
                     MealDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MealCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PreparationTime = table.Column<int>(type: "int", nullable: false)
+                    PreparationTime = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Availability = table.Column<bool>(type: "bit", nullable: false),
+                    Rating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,6 +158,34 @@ namespace MealTimes.Repository.Migrations
                         column: x => x.ChefID,
                         principalTable: "HomeChefs",
                         principalColumn: "ChefID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompanySubscriptionHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CorporateCompanyId = table.Column<int>(type: "int", nullable: false),
+                    SubscriptionPlanID = table.Column<int>(type: "int", nullable: false),
+                    SubscribedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanySubscriptionHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CompanySubscriptionHistories_CorporateCompanies_CorporateCompanyId",
+                        column: x => x.CorporateCompanyId,
+                        principalTable: "CorporateCompanies",
+                        principalColumn: "CompanyID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompanySubscriptionHistories_SubscriptionPlans_SubscriptionPlanID",
+                        column: x => x.SubscriptionPlanID,
+                        principalTable: "SubscriptionPlans",
+                        principalColumn: "SubscriptionPlanID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -308,6 +349,21 @@ namespace MealTimes.Repository.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CompanySubscriptionHistories_CorporateCompanyId",
+                table: "CompanySubscriptionHistories",
+                column: "CorporateCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanySubscriptionHistories_SubscriptionPlanID",
+                table: "CompanySubscriptionHistories",
+                column: "SubscriptionPlanID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CorporateCompanies_ActiveSubscriptionPlanID",
+                table: "CorporateCompanies",
+                column: "ActiveSubscriptionPlanID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CorporateCompanies_AdminID",
                 table: "CorporateCompanies",
                 column: "AdminID");
@@ -386,6 +442,9 @@ namespace MealTimes.Repository.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CompanySubscriptionHistories");
+
             migrationBuilder.DropTable(
                 name: "Feedbacks");
 
