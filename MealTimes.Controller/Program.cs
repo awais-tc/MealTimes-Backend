@@ -24,11 +24,17 @@ builder.Services.AddScoped<IMealRepository, MealRepository>();
 builder.Services.AddScoped<ICorporateCompanyRepository, CorporateCompanyRepository>();
 builder.Services.AddScoped<ISubscriptionHistoryRepository, SubscriptionHistoryRepository>();
 builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 // Helpers
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

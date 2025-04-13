@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealTimes.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250412093558_AddAvailabilityAndRatingToMeal")]
-    partial class AddAvailabilityAndRatingToMeal
+    [Migration("20250413060941_initaiCreate")]
+    partial class initaiCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -51,6 +51,35 @@ namespace MealTimes.Repository.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("MealTimes.Core.Models.CompanySubscriptionHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CorporateCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SubscribedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SubscriptionPlanID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CorporateCompanyId");
+
+                    b.HasIndex("SubscriptionPlanID");
+
+                    b.ToTable("CompanySubscriptionHistories");
+                });
+
             modelBuilder.Entity("MealTimes.Core.Models.CorporateCompany", b =>
                 {
                     b.Property<int>("CompanyID")
@@ -58,6 +87,9 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyID"));
+
+                    b.Property<int?>("ActiveSubscriptionPlanID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -78,13 +110,21 @@ namespace MealTimes.Repository.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubscriptionPlanID")
+                    b.Property<DateTime?>("PlanEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PlanStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SubscriptionPlanID")
                         .HasColumnType("int");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("CompanyID");
+
+                    b.HasIndex("ActiveSubscriptionPlanID");
 
                     b.HasIndex("AdminID");
 
@@ -344,7 +384,13 @@ namespace MealTimes.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubscriptionPlanID"));
 
-                    b.Property<int>("Duration")
+                    b.Property<int>("DurationInDays")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCustomizable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxEmployees")
                         .HasColumnType("int");
 
                     b.Property<int>("MealLimitPerDay")
@@ -428,19 +474,41 @@ namespace MealTimes.Repository.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MealTimes.Core.Models.CompanySubscriptionHistory", b =>
+                {
+                    b.HasOne("MealTimes.Core.Models.CorporateCompany", "CorporateCompany")
+                        .WithMany()
+                        .HasForeignKey("CorporateCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MealTimes.Core.Models.SubscriptionPlan", "SubscriptionPlan")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionPlanID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CorporateCompany");
+
+                    b.Navigation("SubscriptionPlan");
+                });
+
             modelBuilder.Entity("MealTimes.Core.Models.CorporateCompany", b =>
                 {
+                    b.HasOne("MealTimes.Core.Models.SubscriptionPlan", "ActiveSubscriptionPlan")
+                        .WithMany()
+                        .HasForeignKey("ActiveSubscriptionPlanID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("MealTimes.Core.Models.Admin", null)
                         .WithMany()
                         .HasForeignKey("AdminID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MealTimes.Core.Models.SubscriptionPlan", "SubscriptionPlan")
-                        .WithMany()
-                        .HasForeignKey("SubscriptionPlanID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.HasOne("MealTimes.Core.Models.SubscriptionPlan", null)
+                        .WithMany("CompaniesUsingThisPlan")
+                        .HasForeignKey("SubscriptionPlanID");
 
                     b.HasOne("MealTimes.Core.Models.User", "User")
                         .WithOne("CorporateCompany")
@@ -448,7 +516,7 @@ namespace MealTimes.Repository.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("SubscriptionPlan");
+                    b.Navigation("ActiveSubscriptionPlan");
 
                     b.Navigation("User");
                 });
@@ -603,11 +671,14 @@ namespace MealTimes.Repository.Migrations
 
                     b.Navigation("OrderMeals");
 
-                    b.Navigation("Payment")
-                        .IsRequired();
+                    b.Navigation("Payment");
 
-                    b.Navigation("ThirdPartyDeliveryService")
-                        .IsRequired();
+                    b.Navigation("ThirdPartyDeliveryService");
+                });
+
+            modelBuilder.Entity("MealTimes.Core.Models.SubscriptionPlan", b =>
+                {
+                    b.Navigation("CompaniesUsingThisPlan");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.User", b =>

@@ -49,7 +49,7 @@ namespace MealTimes.Core.DTOs
 
         public string Address { get; set; }
 
-        public int SubscriptionPlanID { get; set; }
+        public int ActiveSubscriptionPlanID { get; set; }
 
         public int AdminID { get; set; }
 
@@ -111,13 +111,22 @@ namespace MealTimes.Core.DTOs
 
     public class CorporateCompanyRegisterDto
     {
+        // Required for creating the associated User record
         public string Email { get; set; }
         public string Password { get; set; }
+
+        // Company-specific details
         public string CompanyName { get; set; }
         public string? PhoneNumber { get; set; }
         public string Address { get; set; }
-        public int AdminID { get; set; } // Must be existing admin
+
+        // Existing Admin ID to associate this company with
+        public int AdminID { get; set; }
+
+        // Subscription details
         public int SubscriptionPlanID { get; set; }
+        public DateTime PlanStartDate { get; set; }
+        public DateTime PlanEndDate { get; set; }
     }
 
 

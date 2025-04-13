@@ -17,7 +17,7 @@ namespace MealTimes.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -668,11 +668,9 @@ namespace MealTimes.Repository.Migrations
 
                     b.Navigation("OrderMeals");
 
-                    b.Navigation("Payment")
-                        .IsRequired();
+                    b.Navigation("Payment");
 
-                    b.Navigation("ThirdPartyDeliveryService")
-                        .IsRequired();
+                    b.Navigation("ThirdPartyDeliveryService");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.SubscriptionPlan", b =>

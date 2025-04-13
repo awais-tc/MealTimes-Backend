@@ -14,7 +14,9 @@ namespace MealTimes.API.Mapping
             CreateMap<Admin, AdminDto>();
             CreateMap<Employee, EmployeeDto>();
             CreateMap<HomeChef, HomeChefDto>();
-            CreateMap<CorporateCompany, CorporateCompanyDto>();
+            CreateMap<CorporateCompany, CorporateCompanyDto>()
+             .ForMember(dest => dest.ActiveSubscriptionPlanID, opt => opt.MapFrom(src => src.ActiveSubscriptionPlanID));
+
 
             // Register DTOs
             CreateMap<AdminRegisterDto, Admin>();
@@ -46,6 +48,15 @@ namespace MealTimes.API.Mapping
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<SubscriptionHistoryDto, CompanySubscriptionHistory>();
+
+            //Order
+            CreateMap<Order, OrderResponseDto>()
+                .ForMember(dest => dest.Meals, opt => opt.MapFrom(src => src.OrderMeals.Select(om => om.Meal)));
+
+            CreateMap<Meal, MealSummaryDto>();
+
+            CreateMap<OrderCreationDto, Order>(); // We'll customize this in service layer since it needs extra logic
+
         }
     }
 }

@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MealTimes.Core.Models;
+using Microsoft.Extensions.Logging;
 
 namespace MealTimes.Repository
 {
     public class AppDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration? _configuration;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration? configuration = null)
+            : base(options)
         {
             _configuration = configuration;
         }
@@ -32,7 +34,8 @@ namespace MealTimes.Repository
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-J5IS95J\\SQLEXPRESS;Initial Catalog=MealTimes;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-J5IS95J\\SQLEXPRESS;Initial Catalog=MealTimes;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;")
+                    .LogTo(Console.WriteLine, LogLevel.Information); ;
             }
         }
 
@@ -170,6 +173,14 @@ namespace MealTimes.Repository
                 .WithOne(e => e.User)
                 .HasForeignKey<Employee>(e => e.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.DeliveryStatus)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.PaymentStatus)
+                .HasConversion<string>();
         }
     }
 }
