@@ -57,6 +57,11 @@ namespace MealTimes.API.Mapping
 
             CreateMap<OrderCreationDto, Order>(); // We'll customize this in service layer since it needs extra logic
 
+            //Payment DTO <-> Payment Entity
+            CreateMap<Payment, PaymentDto>().ReverseMap();
+            CreateMap<CreatePaymentDto, Payment>();
+
+
         }
     }
 }

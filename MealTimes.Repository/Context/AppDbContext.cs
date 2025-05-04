@@ -181,6 +181,20 @@ namespace MealTimes.Repository
             modelBuilder.Entity<Order>()
                 .Property(o => o.PaymentStatus)
                 .HasConversion<string>();
+
+            // ✅ Allow Payment to link optionally to a SubscriptionPlan
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.SubscriptionPlan)
+                .WithMany() // If SubscriptionPlan has a Payments collection, replace with .WithMany(sp => sp.Payments)
+                .HasForeignKey(p => p.SubscriptionPlanID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // ✅ Allow Payment to optionally reference the CorporateCompany (who paid for the subscription)
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.CorporateCompany)
+                .WithMany() // If CorporateCompany has a Payments collection, replace with .WithMany(c => c.Payments)
+                .HasForeignKey(p => p.CorporateCompanyID)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

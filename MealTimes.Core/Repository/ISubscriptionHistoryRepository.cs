@@ -6,5 +6,6 @@ namespace MealTimes.Core.Repository
     {
         Task<List<CompanySubscriptionHistory>> GetByCompanyIdAsync(int companyId);
         Task AddAsync(CompanySubscriptionHistory subscriptionHistory);
+        Task<SubscriptionPlan?> GetByIdAsync(int planId);
     }
 }
