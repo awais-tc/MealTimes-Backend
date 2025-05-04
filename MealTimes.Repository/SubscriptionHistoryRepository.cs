@@ -22,6 +22,11 @@ namespace MealTimes.Core.Repository
                 .ToListAsync();
         }
 
+        public async Task<SubscriptionPlan?> GetByIdAsync(int id)
+        {
+            return await _context.SubscriptionPlans.FindAsync(id);
+        }
+
         public async Task AddAsync(CompanySubscriptionHistory subscriptionHistory)
         {
             await _context.CompanySubscriptionHistories.AddAsync(subscriptionHistory);

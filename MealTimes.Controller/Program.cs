@@ -7,6 +7,7 @@ using MealTimes.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System.Text;
 using TheMealTimes.Repositories;
 
@@ -26,18 +27,20 @@ builder.Services.AddScoped<ISubscriptionHistoryRepository, SubscriptionHistoryRe
 builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
-
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 
 // Helpers
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+// Program.cs or Startup.cs
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 // Controllers
 builder.Services.AddControllers();
