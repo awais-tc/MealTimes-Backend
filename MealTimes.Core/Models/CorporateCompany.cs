@@ -20,7 +20,7 @@ namespace MealTimes.Core.Models
 
         public required string Address { get; set; }
 
-        public int AdminID { get; set; }
+        public int? AdminID { get; set; }
 
         public int? ActiveSubscriptionPlanID { get; set; }
 
