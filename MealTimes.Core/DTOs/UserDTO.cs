@@ -121,21 +121,12 @@ namespace MealTimes.Core.DTOs
         public string Address { get; set; }
 
         // Existing Admin ID to associate this company with
-        public int AdminID { get; set; }
+        public int? AdminID { get; set; }
 
         // Subscription details
-        public int SubscriptionPlanID { get; set; }
-        public DateTime PlanStartDate { get; set; }
-        public DateTime PlanEndDate { get; set; }
-    }
-
-
-    public class EmployeeCreateDto
-    {
-        public string FullName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string DietaryPreferences { get; set; }
-        public int CompanyID { get; set; }
+        public int? SubscriptionPlanID { get; set; }
+        public DateTime? PlanStartDate { get; set; }
+        public DateTime? PlanEndDate { get; set; }
     }
 
     public class EmployeeRegisterDto
@@ -144,16 +135,8 @@ namespace MealTimes.Core.DTOs
         public string Password { get; set; }
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
-        public string DietaryPreferences { get; set; }
+        public string? DietaryPreferences { get; set; }
         public int CompanyID { get; set; } // Must be existing company
-    }
-
-
-    public class HomeChefCreateDto
-    {
-        public string FullName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Address { get; set; }
     }
 
     public class HomeChefRegisterDto

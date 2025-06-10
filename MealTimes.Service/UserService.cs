@@ -164,7 +164,7 @@ namespace MealTimes.Service
             if (user == null)
                 return GenericResponse<bool>.Fail("User not found.");
 
-            _userRepository.DeleteUserAsync(id);
+            await _userRepository.DeleteUserAsync(id);
             await _userRepository.SaveChangesAsync();
             return GenericResponse<bool>.Success(true, "User deleted successfully.");
         }

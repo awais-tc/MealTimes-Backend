@@ -4,6 +4,7 @@ using MealTimes.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealTimes.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506174152_corporateSignupFix")]
+    partial class corporateSignupFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace MealTimes.Repository.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("Admins", (string)null);
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.CompanySubscriptionHistory", b =>
@@ -74,7 +77,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasIndex("SubscriptionPlanID");
 
-                    b.ToTable("CompanySubscriptionHistories", (string)null);
+                    b.ToTable("CompanySubscriptionHistories");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.CorporateCompany", b =>
@@ -130,7 +133,7 @@ namespace MealTimes.Repository.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("CorporateCompanies", (string)null);
+                    b.ToTable("CorporateCompanies");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.Employee", b =>
@@ -145,6 +148,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DietaryPreferences")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -170,7 +174,7 @@ namespace MealTimes.Repository.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.Feedback", b =>
@@ -200,7 +204,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("Feedbacks", (string)null);
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.HomeChef", b =>
@@ -239,7 +243,7 @@ namespace MealTimes.Repository.Migrations
                     b.HasIndex("UserID")
                         .IsUnique();
 
-                    b.ToTable("HomeChefs", (string)null);
+                    b.ToTable("HomeChefs");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.Meal", b =>
@@ -284,7 +288,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasIndex("ChefID");
 
-                    b.ToTable("Meals", (string)null);
+                    b.ToTable("Meals");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.Order", b =>
@@ -318,7 +322,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasIndex("EmployeeID");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.OrderMeal", b =>
@@ -336,7 +340,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasIndex("MealID");
 
-                    b.ToTable("OrderMeals", (string)null);
+                    b.ToTable("OrderMeals");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.Payment", b =>
@@ -383,7 +387,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasIndex("SubscriptionPlanID");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.SubscriptionPlan", b =>
@@ -415,7 +419,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasKey("SubscriptionPlanID");
 
-                    b.ToTable("SubscriptionPlans", (string)null);
+                    b.ToTable("SubscriptionPlans");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.ThirdPartyDeliveryService", b =>
@@ -445,7 +449,7 @@ namespace MealTimes.Repository.Migrations
                     b.HasIndex("OrderID")
                         .IsUnique();
 
-                    b.ToTable("ThirdPartyDeliveryServices", (string)null);
+                    b.ToTable("ThirdPartyDeliveryServices");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.User", b =>
@@ -470,7 +474,7 @@ namespace MealTimes.Repository.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MealTimes.Core.Models.Admin", b =>
@@ -478,7 +482,7 @@ namespace MealTimes.Repository.Migrations
                     b.HasOne("MealTimes.Core.Models.User", "User")
                         .WithOne("Admin")
                         .HasForeignKey("MealTimes.Core.Models.Admin", "UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");

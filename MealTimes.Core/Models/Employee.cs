@@ -27,7 +27,7 @@ namespace MealTimes.Core.Models
         [Required, Phone]
         public string PhoneNumber { get; set; }
 
-        public string DietaryPreferences { get; set; }
+        public string? DietaryPreferences { get; set; }
 
         public int UserID { get; set; }
         [ForeignKey("UserID")]

@@ -132,26 +132,26 @@ namespace MealTimes.Repository
                 .HasOne(e => e.User)
                 .WithOne(u => u.Employee)
                 .HasForeignKey<Employee>(e => e.UserID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<HomeChef>()
                 .HasOne(h => h.User)
                 .WithOne(u => u.HomeChef)
                 .HasForeignKey<HomeChef>(h => h.UserID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CorporateCompany>()
                 .HasOne(c => c.User)
                 .WithOne(u => u.CorporateCompany)
                 .HasForeignKey<CorporateCompany>(c => c.UserID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // One-to-one: User <--> Admin
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Admin)
                 .WithOne(a => a.User)
                 .HasForeignKey<Admin>(a => a.UserID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // One-to-one: User <--> HomeChef
             modelBuilder.Entity<User>()
