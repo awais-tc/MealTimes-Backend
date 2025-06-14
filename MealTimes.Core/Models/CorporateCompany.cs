@@ -37,5 +37,4 @@ namespace MealTimes.Core.Models
 
         public ICollection<Employee> Employees { get; set; }
     }
-
 }

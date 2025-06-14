@@ -40,20 +40,13 @@ namespace MealTimes.Core.DTOs
     public class CorporateCompanyDto
     {
         public int CompanyID { get; set; }
-
         public string CompanyName { get; set; }
-
         public string Email { get; set; }
-
         public string? PhoneNumber { get; set; }
-
         public string Address { get; set; }
-
-        public int ActiveSubscriptionPlanID { get; set; }
-
-        public int AdminID { get; set; }
-
-        public int UserID { get; set; }
+        public DateTime? PlanStartDate { get; set; }
+        public DateTime? PlanEndDate { get; set; }
+        public string? ActivePlanName { get; set; }
     }
 
     public class EmployeeDto
@@ -147,7 +140,4 @@ namespace MealTimes.Core.DTOs
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
     }
-
-
-
 }

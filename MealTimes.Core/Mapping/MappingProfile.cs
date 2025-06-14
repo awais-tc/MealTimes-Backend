@@ -15,7 +15,7 @@ namespace MealTimes.API.Mapping
             CreateMap<Employee, EmployeeDto>();
             CreateMap<HomeChef, HomeChefDto>();
             CreateMap<CorporateCompany, CorporateCompanyDto>()
-             .ForMember(dest => dest.ActiveSubscriptionPlanID, opt => opt.MapFrom(src => src.ActiveSubscriptionPlanID));
+             .ForMember(dest => dest.ActivePlanName, opt => opt.Ignore());
 
 
             // Register DTOs
