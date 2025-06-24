@@ -12,12 +12,26 @@ namespace MealTimes.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly ICorporateCompanyRepository _companyRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IHomeChefRepository _homeChefRepository;
+        private readonly IDeliveryPersonRepository _deliveryPersonRepository;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, IJwtTokenGenerator jwtTokenGenerator)
+        public UserService(IUserRepository userRepository,
+            IMapper mapper, 
+            IJwtTokenGenerator jwtTokenGenerator, 
+            ICorporateCompanyRepository companyRepository, 
+            IEmployeeRepository employeeRepository, 
+            IHomeChefRepository homeChefRepository,
+            IDeliveryPersonRepository deliveryPersonRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _companyRepository = companyRepository;
+            _employeeRepository = employeeRepository;
+            _homeChefRepository = homeChefRepository;
+            _deliveryPersonRepository = deliveryPersonRepository;
         }
 
         public async Task<GenericResponse<UserDto>> RegisterAdminAsync(AdminRegisterDto dto)
@@ -130,6 +144,34 @@ namespace MealTimes.Service
             return GenericResponse<UserDto>.Success(_mapper.Map<UserDto>(user), "Home Chef registered successfully.");
         }
 
+        public async Task<GenericResponse<UserDto>> RegisterDeliveryPersonAsync(DeliveryPersonRegisterDto dto)
+        {
+            if (await _userRepository.UserExistsAsync(dto.Email))
+                return GenericResponse<UserDto>.Fail("Email already in use.");
+
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+            var user = new User
+            {
+                Email = dto.Email,
+                PasswordHash = hashedPassword,
+                Role = "DeliveryPerson",
+                DeliveryPerson = new DeliveryPerson
+                {
+                    FullName = dto.FullName,
+                    Email = dto.Email,
+                    PhoneNumber = dto.PhoneNumber,
+                    Address = dto.Address,
+                    VehicleInfo = dto.VehicleInfo
+                }
+            };
+
+            await _userRepository.AddUserAsync(user);
+            await _userRepository.SaveChangesAsync();
+
+            return GenericResponse<UserDto>.Success(_mapper.Map<UserDto>(user), "Delivery person registered successfully.");
+        }
+
         public async Task<GenericResponse<AuthResponseDto>> LoginAsync(LoginDto dto)
         {
             var user = await _userRepository.GetUserByEmailAsync(dto.Email);
@@ -164,8 +206,29 @@ namespace MealTimes.Service
             if (user == null)
                 return GenericResponse<bool>.Fail("User not found.");
 
+            // Delete role-specific entity first
+            switch (user.Role)
+            {
+                case "Company":
+                    if (user.CorporateCompany != null)
+                        await _companyRepository.DeleteAsync(user.CorporateCompany.CompanyID);
+                    break;
+
+                case "Employee":
+                    if (user.Employee != null)
+                        await _employeeRepository.DeleteAsync(user.Employee.EmployeeID);
+                    break;
+
+                case "Chef":
+                    if (user.HomeChef != null)
+                        await _homeChefRepository.DeleteAsync(user.HomeChef.ChefID);
+                    break;
+            }
+
+            // Delete user after role entity is removed
             await _userRepository.DeleteUserAsync(id);
             await _userRepository.SaveChangesAsync();
+
             return GenericResponse<bool>.Success(true, "User deleted successfully.");
         }
     }

@@ -43,6 +43,19 @@ public class MealService : IMealService
         return GenericResponse<MealDto>.Success(result, "Meal updated successfully");
     }
 
+    public async Task<GenericResponse<bool>> UpdateMealAvailabilityAsync(UpdateMealAvailabilityDto dto)
+    {
+        var meal = await _mealRepo.GetMealByIdAsync(dto.MealId);
+        if (meal == null)
+            return GenericResponse<bool>.Fail("Meal not found.");
+
+        meal.Availability = dto.Availability;
+        await _mealRepo.UpdateMealAsync(meal);
+        await _mealRepo.SaveChangesAsync();
+
+        return GenericResponse<bool>.Success(true, "Meal availability updated.");
+    }
+
     public async Task<GenericResponse<bool>> DeleteMealAsync(int mealId)
     {
         var meal = await _mealRepo.GetMealByIdAsync(mealId);

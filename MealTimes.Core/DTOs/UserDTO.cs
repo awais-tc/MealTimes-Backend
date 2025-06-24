@@ -49,11 +49,22 @@ namespace MealTimes.Core.DTOs
         public string? ActivePlanName { get; set; }
     }
 
+    public class UpdateCorporateCompanyDto
+    {
+        public int CompanyID { get; set; }
+        public string CompanyName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+    }
+
     public class EmployeeDto
     {
         public int EmployeeID { get; set; }
 
         public int CompanyID { get; set; }
+
+        public string CompanyName { get; set; }
 
         public string FullName { get; set; }
 
@@ -64,6 +75,13 @@ namespace MealTimes.Core.DTOs
         public string? DietaryPreferences { get; set; }
 
         public int UserID { get; set; }
+    }
+
+    public class UpdateEmployeeDto
+    {
+        public int EmployeeID { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
     }
 
 
@@ -139,5 +157,35 @@ namespace MealTimes.Core.DTOs
         public string FullName { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
+    }
+
+    public class DeliveryPersonRegisterDto
+    {
+        public string FullName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? VehicleInfo { get; set; }
+    }
+
+    public class DeliveryPersonDto
+    {
+        public int DeliveryPersonID { get; set; }
+        public string FullName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? VehicleInfo { get; set; }
+    }
+
+    public class DeliveryPersonUpdateDto
+    {
+        public int DeliveryPersonID { get; set; }
+        public string? FullName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? VehicleInfo { get; set; }
     }
 }

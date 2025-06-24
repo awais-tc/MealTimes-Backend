@@ -46,6 +46,13 @@ namespace MealTimes.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
+        [HttpPost("register/delivery-person")]
+        public async Task<IActionResult> RegisterDeliveryPerson([FromBody] DeliveryPersonRegisterDto dto)
+        {
+            var response = await _userService.RegisterDeliveryPersonAsync(dto);
+            return StatusCode(response.StatusCode, response);
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {

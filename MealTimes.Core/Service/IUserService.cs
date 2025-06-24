@@ -14,6 +14,7 @@ namespace MealTimes.Core.Service
         Task<GenericResponse<UserDto>> RegisterCompanyAsync(CorporateCompanyRegisterDto dto);
         Task<GenericResponse<UserDto>> RegisterEmployeeAsync(EmployeeRegisterDto dto);
         Task<GenericResponse<UserDto>> RegisterHomeChefAsync(HomeChefRegisterDto dto);
+        Task<GenericResponse<UserDto>> RegisterDeliveryPersonAsync(DeliveryPersonRegisterDto dto);
         Task<GenericResponse<AuthResponseDto>> LoginAsync(LoginDto dto);
         Task<GenericResponse<IEnumerable<UserDto>>> GetAllUsersAsync();
         Task<GenericResponse<UserDto>> GetUserByIdAsync(int id);

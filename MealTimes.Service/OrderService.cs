@@ -122,4 +122,23 @@ public class OrderService : IOrderService
         var orderDto = _mapper.Map<OrderResponseDto>(order);
         return GenericResponse<OrderResponseDto>.Success(orderDto);
     }
+
+    public async Task<GenericResponse<bool>> UpdateOrderStatusByChefAsync(int orderId, string newStatus, int chefId)
+    {
+        var order = await _orderRepository.GetOrderByIdAsync(orderId);
+        if (order == null)
+            return GenericResponse<bool>.Fail("Order not found.");
+
+        if (order.ChefID != chefId)
+            return GenericResponse<bool>.Fail("Unauthorized: This order is not assigned to you.");
+
+        if (newStatus != "ReadyForPickup")
+            return GenericResponse<bool>.Fail("Only 'ReadyForPickup' status can be set by chefs.");
+
+        order.DeliveryStatus = DeliveryStatus.ReadyForPickup;
+        await _orderRepository.UpdateAsync(order);
+        await _orderRepository.SaveChangesAsync();
+
+        return GenericResponse<bool>.Success(true, "Order status updated to Ready for Pickup.");
+    }
 }

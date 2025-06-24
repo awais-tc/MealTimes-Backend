@@ -1,5 +1,6 @@
 ﻿using MealTimes.Core.DTOs;
 using MealTimes.Core.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -77,5 +78,13 @@ public class OrderController : ControllerBase
             return NotFound(response.Message);
 
         return Ok(response.Data);
+    }
+
+    [HttpPatch("chef/update-status")]
+    [Authorize(Roles = "Chef")]
+    public async Task<IActionResult> UpdateOrderStatusByChef([FromBody] UpdateOrderStatusByChefDto dto)
+    {
+        var response = await _orderService.UpdateOrderStatusByChefAsync(dto.OrderId, dto.NewStatus, dto.ChefId);
+        return StatusCode(response.StatusCode, response);
     }
 }

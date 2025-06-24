@@ -61,4 +61,10 @@ namespace MealTimes.Core.DTOs
         public List<MealDto> Meals { get; set; }
     }
 
+    public class UpdateOrderStatusByChefDto
+    {
+        public int OrderId { get; set; }
+        public string NewStatus { get; set; } = null!;
+        public int ChefId { get; set; } // (optional: extract from JWT if already logged-in chef)
+    }
 }

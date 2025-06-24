@@ -29,6 +29,7 @@ namespace MealTimes.Core.Models
         public ThirdPartyDeliveryService? ThirdPartyDeliveryService { get; set; }
         public ICollection<Feedback>? Feedbacks { get; set; }
         public Payment? Payment { get; set; }
+        public virtual Delivery? Delivery { get; set; }
     }
 
     public enum PaymentStatus
@@ -43,8 +44,8 @@ namespace MealTimes.Core.Models
         Pending,
         Preparing,
         ReadyForPickup,
+        Assigned,
         InTransit,
         Delivered
     }
-
 }
