@@ -66,4 +66,15 @@ public class OrderRepository : IOrderRepository
                 .ThenInclude(om => om.Meal)
             .FirstOrDefaultAsync(o => o.OrderID == orderId);
     }
+
+    public Task UpdateAsync(Order order)
+    {
+        _context.Orders.Update(order);
+        return Task.CompletedTask;
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
 }

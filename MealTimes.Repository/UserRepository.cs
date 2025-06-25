@@ -31,6 +31,7 @@ namespace TheMealTimes.Repositories
                 .Include(u => u.CorporateCompany)
                 .Include(u => u.Employee)
                 .Include(u => u.HomeChef)
+                .Include(u => u.DeliveryPerson)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 
@@ -66,6 +67,7 @@ namespace TheMealTimes.Repositories
                 .Include(u => u.HomeChef)
                 .Include(u => u.CorporateCompany)
                 .Include(u => u.Employee)
+                .Include(u => u.DeliveryPerson)
                 .ToListAsync();
         }
 
@@ -76,6 +78,7 @@ namespace TheMealTimes.Repositories
                 .Include(u => u.HomeChef)
                 .Include(u => u.CorporateCompany)
                 .Include(u => u.Employee)
+                .Include(u => u.DeliveryPerson)
                 .FirstOrDefaultAsync(u => u.UserID == id);
         }
 

@@ -1,5 +1,6 @@
 ﻿using MealTimes.Core.DTOs;
 using MealTimes.Core.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealTimes.Controller.Controllers;
@@ -29,6 +30,14 @@ public class MealController : ControllerBase
             return BadRequest("Meal ID mismatch");
 
         var response = await _mealService.UpdateMealAsync(dto);
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpPatch("availability")]
+    [Authorize(Roles = "Chef")]
+    public async Task<IActionResult> UpdateMealAvailability([FromBody] UpdateMealAvailabilityDto dto)
+    {
+        var response = await _mealService.UpdateMealAvailabilityAsync(dto);
         return StatusCode(response.StatusCode, response);
     }
 

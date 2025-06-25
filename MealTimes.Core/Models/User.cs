@@ -23,5 +23,6 @@ namespace MealTimes.Core.Models
             public virtual CorporateCompany? CorporateCompany { get; set; }
             public virtual Employee? Employee { get; set; }
             public virtual Admin? Admin { get; set; }
+            public virtual DeliveryPerson? DeliveryPerson { get; set; }
         }
 }

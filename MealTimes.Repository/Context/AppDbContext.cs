@@ -29,6 +29,8 @@ namespace MealTimes.Repository
         public DbSet<User> Users { get; set; } // Ensure User table exists in the DbContext
         public DbSet<OrderMeal> OrderMeals { get; set; } // New join table
         public DbSet<CompanySubscriptionHistory> CompanySubscriptionHistories { get; set; }
+        public DbSet<DeliveryPerson> DeliveryPersons { get; set; }
+        public DbSet<Delivery> Deliveries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -195,6 +197,32 @@ namespace MealTimes.Repository
                 .WithMany() // If CorporateCompany has a Payments collection, replace with .WithMany(c => c.Payments)
                 .HasForeignKey(p => p.CorporateCompanyID)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // One-to-one: User <--> DeliveryPerson
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.DeliveryPerson)
+                .WithOne(dp => dp.User)
+                .HasForeignKey<DeliveryPerson>(dp => dp.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DeliveryPerson to Delivery (1:N)
+            modelBuilder.Entity<Delivery>()
+                .HasOne(d => d.DeliveryPerson)
+                .WithMany(dp => dp.Deliveries)
+                .HasForeignKey(d => d.DeliveryPersonID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Order to Delivery (1:1)
+            modelBuilder.Entity<Delivery>()
+                .HasOne(d => d.Order)
+                .WithOne(o => o.Delivery)
+                .HasForeignKey<Delivery>(d => d.OrderID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Enum conversion for DeliveryStatus
+            modelBuilder.Entity<Delivery>()
+                .Property(d => d.Status)
+                .HasConversion<string>();
         }
     }
 }

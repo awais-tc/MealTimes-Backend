@@ -122,4 +122,37 @@ public class OrderService : IOrderService
         var orderDto = _mapper.Map<OrderResponseDto>(order);
         return GenericResponse<OrderResponseDto>.Success(orderDto);
     }
+
+    public async Task<GenericResponse<bool>> UpdateOrderStatusByChefAsync(int orderId, string newStatus, int chefId)
+    {
+        var order = await _orderRepository.GetOrderByIdAsync(orderId);
+        if (order == null)
+            return GenericResponse<bool>.Fail("Order not found.");
+
+        if (order.ChefID != chefId)
+            return GenericResponse<bool>.Fail("Unauthorized: This order is not assigned to you.");
+
+        // Ensure the status is a valid enum value
+        if (!Enum.TryParse<DeliveryStatus>(newStatus, out var requestedStatus))
+            return GenericResponse<bool>.Fail("Invalid status.");
+
+        // Check valid status transitions
+        if (order.DeliveryStatus == DeliveryStatus.Pending && requestedStatus == DeliveryStatus.Preparing)
+        {
+            order.DeliveryStatus = DeliveryStatus.Preparing;
+        }
+        else if (order.DeliveryStatus == DeliveryStatus.Preparing && requestedStatus == DeliveryStatus.ReadyForPickup)
+        {
+            order.DeliveryStatus = DeliveryStatus.ReadyForPickup;
+        }
+        else
+        {
+            return GenericResponse<bool>.Fail($"Invalid status transition from {order.DeliveryStatus} to {requestedStatus}.");
+        }
+
+        await _orderRepository.UpdateAsync(order);
+        await _orderRepository.SaveChangesAsync();
+
+        return GenericResponse<bool>.Success(true, $"Order status updated to {requestedStatus}.");
+    }
 }

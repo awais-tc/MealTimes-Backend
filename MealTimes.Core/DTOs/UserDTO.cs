@@ -24,6 +24,7 @@ namespace MealTimes.Core.DTOs
         public CorporateCompanyDto? CorporateCompany { get; set; }
         public EmployeeDto? Employee { get; set; }
         public HomeChefDto? HomeChef { get; set; }
+        public DeliveryPersonDto? DeliveryPerson { get; set; }
     }
 
     public class AdminDto
@@ -40,20 +41,22 @@ namespace MealTimes.Core.DTOs
     public class CorporateCompanyDto
     {
         public int CompanyID { get; set; }
-
         public string CompanyName { get; set; }
-
         public string Email { get; set; }
-
         public string? PhoneNumber { get; set; }
-
         public string Address { get; set; }
+        public DateTime? PlanStartDate { get; set; }
+        public DateTime? PlanEndDate { get; set; }
+        public string? ActivePlanName { get; set; }
+    }
 
-        public int ActiveSubscriptionPlanID { get; set; }
-
-        public int AdminID { get; set; }
-
-        public int UserID { get; set; }
+    public class UpdateCorporateCompanyDto
+    {
+        public int CompanyID { get; set; }
+        public string CompanyName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
     }
 
     public class EmployeeDto
@@ -61,6 +64,8 @@ namespace MealTimes.Core.DTOs
         public int EmployeeID { get; set; }
 
         public int CompanyID { get; set; }
+
+        public string CompanyName { get; set; }
 
         public string FullName { get; set; }
 
@@ -71,6 +76,13 @@ namespace MealTimes.Core.DTOs
         public string? DietaryPreferences { get; set; }
 
         public int UserID { get; set; }
+    }
+
+    public class UpdateEmployeeDto
+    {
+        public int EmployeeID { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
     }
 
 
@@ -148,6 +160,33 @@ namespace MealTimes.Core.DTOs
         public string Address { get; set; }
     }
 
+    public class DeliveryPersonRegisterDto
+    {
+        public string FullName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
 
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? VehicleInfo { get; set; }
+    }
 
+    public class DeliveryPersonDto
+    {
+        public int DeliveryPersonID { get; set; }
+        public string FullName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? VehicleInfo { get; set; }
+    }
+
+    public class DeliveryPersonUpdateDto
+    {
+        public int DeliveryPersonID { get; set; }
+        public string? FullName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? VehicleInfo { get; set; }
+    }
 }

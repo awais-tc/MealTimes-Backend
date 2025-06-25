@@ -50,4 +50,9 @@ namespace MealTimes.Core.DTOs
         public bool? AvailableOnly { get; set; }
     }
 
+    public class UpdateMealAvailabilityDto
+    {
+        public int MealId { get; set; }
+        public bool Availability { get; set; }
+    }
 }

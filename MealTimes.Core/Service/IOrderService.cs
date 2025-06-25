@@ -16,5 +16,6 @@ namespace MealTimes.Core.Service
         Task<GenericResponse<List<OrderResponseDto>>> GetOrdersByCompanyAsync(int companyId);
         Task<GenericResponse<List<OrderResponseDto>>> GetAllOrdersAsync();
         Task<GenericResponse<OrderResponseDto>> GetOrderByIdAsync(int orderId);
+        Task<GenericResponse<bool>> UpdateOrderStatusByChefAsync(int orderId, string newStatus, int chefId);
     }
 }

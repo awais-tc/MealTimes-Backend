@@ -28,6 +28,10 @@ builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanReposito
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IHomeChefRepository, HomeChefRepository>();
+builder.Services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
+builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -35,6 +39,11 @@ builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ICorporateCompanyService, CorporateCompanyService>();
+builder.Services.AddScoped<IHomeChefService, HomeChefService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 
 
 // Helpers
