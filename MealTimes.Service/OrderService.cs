@@ -132,13 +132,27 @@ public class OrderService : IOrderService
         if (order.ChefID != chefId)
             return GenericResponse<bool>.Fail("Unauthorized: This order is not assigned to you.");
 
-        if (newStatus != "ReadyForPickup")
-            return GenericResponse<bool>.Fail("Only 'ReadyForPickup' status can be set by chefs.");
+        // Ensure the status is a valid enum value
+        if (!Enum.TryParse<DeliveryStatus>(newStatus, out var requestedStatus))
+            return GenericResponse<bool>.Fail("Invalid status.");
 
-        order.DeliveryStatus = DeliveryStatus.ReadyForPickup;
+        // Check valid status transitions
+        if (order.DeliveryStatus == DeliveryStatus.Pending && requestedStatus == DeliveryStatus.Preparing)
+        {
+            order.DeliveryStatus = DeliveryStatus.Preparing;
+        }
+        else if (order.DeliveryStatus == DeliveryStatus.Preparing && requestedStatus == DeliveryStatus.ReadyForPickup)
+        {
+            order.DeliveryStatus = DeliveryStatus.ReadyForPickup;
+        }
+        else
+        {
+            return GenericResponse<bool>.Fail($"Invalid status transition from {order.DeliveryStatus} to {requestedStatus}.");
+        }
+
         await _orderRepository.UpdateAsync(order);
         await _orderRepository.SaveChangesAsync();
 
-        return GenericResponse<bool>.Success(true, "Order status updated to Ready for Pickup.");
+        return GenericResponse<bool>.Success(true, $"Order status updated to {requestedStatus}.");
     }
 }

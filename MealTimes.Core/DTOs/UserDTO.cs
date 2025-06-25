@@ -24,6 +24,7 @@ namespace MealTimes.Core.DTOs
         public CorporateCompanyDto? CorporateCompany { get; set; }
         public EmployeeDto? Employee { get; set; }
         public HomeChefDto? HomeChef { get; set; }
+        public DeliveryPersonDto? DeliveryPerson { get; set; }
     }
 
     public class AdminDto
