@@ -34,7 +34,10 @@ namespace MealTimes.Repository
 
         public async Task<IEnumerable<Payment>> GetAllPaymentsAsync()
         {
-            return await _context.Payments.ToListAsync();
+            return await _context.Payments
+               .Include(p => p.SubscriptionPlan)
+               .Include(p => p.CorporateCompany)
+               .ToListAsync();
         }
     }
 

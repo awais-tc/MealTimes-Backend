@@ -56,6 +56,7 @@ public class PaymentService : IPaymentService
         var payment = new Payment
         {
             CorporateCompanyID = company.CompanyID,
+            SubscriptionPlanID = plan.SubscriptionPlanID,
             PaymentAmount = plan.Price,
             PaymentDate = DateTime.UtcNow,
             PaymentMethod = "Stripe",
@@ -67,10 +68,17 @@ public class PaymentService : IPaymentService
 
         company.ActiveSubscriptionPlanID = plan.SubscriptionPlanID;
         company.PlanStartDate = DateTime.UtcNow;
-        company.PlanEndDate = DateTime.UtcNow.AddMonths(1); // configurable
+        company.PlanEndDate = DateTime.UtcNow.AddDays(plan.DurationInDays);
         await _companyRepo.UpdateAsync(company);
 
         var responseDto = _mapper.Map<PaymentResponseDto>(payment);
         return GenericResponse<PaymentResponseDto>.Success(responseDto, "Payment successful");
+    }
+
+    public async Task<GenericResponse<List<PaymentResponseDto>>> GetAllPaymentsAsync()
+    {
+        var payments = await _paymentRepo.GetAllPaymentsAsync();
+        var dtoList = _mapper.Map<List<PaymentResponseDto>>(payments);
+        return GenericResponse<List<PaymentResponseDto>>.Success(dtoList);
     }
 }

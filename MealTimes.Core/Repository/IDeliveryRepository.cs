@@ -10,6 +10,7 @@ namespace MealTimes.Core.Repository
     public interface IDeliveryRepository
     {
         Task<Delivery?> GetByIdAsync(int id);
+        Task<Delivery?> GetByTrackingNumberAsync(string trackingNumber);
         Task<IEnumerable<Delivery>> GetAllAsync();
         Task<IEnumerable<Delivery>> GetByDeliveryPersonIdAsync(int deliveryPersonId);
         Task AddAsync(Delivery delivery);

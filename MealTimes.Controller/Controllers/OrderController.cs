@@ -87,4 +87,14 @@ public class OrderController : ControllerBase
         var response = await _orderService.UpdateOrderStatusByChefAsync(dto.OrderId, dto.NewStatus, dto.ChefId);
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpGet("track/{trackingNumber}")]
+    public async Task<IActionResult> TrackOrderByTrackingNumberAsync(string trackingNumber)
+    {
+        var response = await _orderService.TrackOrderByTrackingNumberAsync(trackingNumber);
+        if (!response.IsSuccess)
+            return NotFound(response.Message);
+
+        return Ok(response.Data);
+    }
 }

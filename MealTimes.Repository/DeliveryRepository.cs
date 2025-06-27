@@ -26,6 +26,12 @@ namespace MealTimes.Repository
                 .FirstOrDefaultAsync(d => d.DeliveryID == id);
         }
 
+        public async Task<Delivery?> GetByTrackingNumberAsync(string trackingNumber)
+        {
+            return await _context.Deliveries
+                .FirstOrDefaultAsync(d => d.TrackingNumber == trackingNumber);
+        }
+
         public async Task<IEnumerable<Delivery>> GetByDeliveryPersonIdAsync(int deliveryPersonId)
         {
             return await _context.Deliveries

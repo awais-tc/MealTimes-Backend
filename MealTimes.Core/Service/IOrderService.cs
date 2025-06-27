@@ -12,6 +12,7 @@ namespace MealTimes.Core.Service
     {
         Task<GenericResponse<OrderResponseDto>> CreateOrderAsync(CreateOrderDto dto);
         Task<GenericResponse<List<OrderResponseDto>>> GetOrdersByEmployeeAsync(int employeeId);
+        Task<GenericResponse<OrderTrackingDto>> TrackOrderByTrackingNumberAsync(string trackingNumber);
         Task<GenericResponse<List<OrderResponseDto>>> GetOrdersForChefAsync(int chefId);
         Task<GenericResponse<List<OrderResponseDto>>> GetOrdersByCompanyAsync(int companyId);
         Task<GenericResponse<List<OrderResponseDto>>> GetAllOrdersAsync();

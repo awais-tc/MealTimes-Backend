@@ -14,14 +14,19 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> CreateOrderAsync(Order order)
     {
-        await _context.Orders.AddAsync(order);
+        _context.Orders.Add(order);
         await _context.SaveChangesAsync();
-        return order;
+
+        return await _context.Orders
+            .Include(o => o.OrderMeals)
+                .ThenInclude(om => om.Meal)
+            .FirstOrDefaultAsync(o => o.OrderID == order.OrderID);
     }
 
     public async Task<List<Order>> GetOrdersByEmployeeAsync(int employeeId)
     {
         return await _context.Orders
+            .Include(o => o.Delivery)
             .Include(o => o.OrderMeals)
                 .ThenInclude(om => om.Meal)
             .Where(o => o.EmployeeID == employeeId)

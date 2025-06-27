@@ -1,5 +1,6 @@
 ﻿using MealTimes.Core.DTOs;
 using MealTimes.Core.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealTimes.Controller
@@ -23,6 +24,18 @@ namespace MealTimes.Controller
             if (!result.IsSuccess)
                 return BadRequest(result);
             return Ok(result);
+        }
+
+        // GET: api/payment/all
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllPaymentsAsync()
+        {
+            var response = await _paymentService.GetAllPaymentsAsync();
+            if (!response.IsSuccess)
+                return NotFound(response.Message);
+
+            return Ok(response.Data);
         }
     }
 }

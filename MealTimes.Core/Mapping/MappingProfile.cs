@@ -52,16 +52,31 @@ namespace MealTimes.API.Mapping
 
             //Order
             CreateMap<Order, OrderResponseDto>()
-                .ForMember(dest => dest.Meals, opt => opt.MapFrom(src => src.OrderMeals.Select(om => om.Meal)));
+                .ForMember(dest => dest.Meals, opt => opt.MapFrom(src => src.OrderMeals.Select(om => om.Meal)))
+                .ForMember(dest => dest.TrackingNumber, opt => opt.MapFrom(src => src.Delivery != null ? src.Delivery.TrackingNumber : null));
 
-            CreateMap<Meal, MealSummaryDto>();
+            CreateMap<Delivery, OrderTrackingDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<CorporateCompany, CorporateCompanyDto>()
+               .ForMember(dest => dest.ActivePlanName,
+                opt => opt.MapFrom(src => src.ActiveSubscriptionPlan != null ? src.ActiveSubscriptionPlan.PlanName : null));
+
+
+            CreateMap<Meal, MealSummaryDto>()
+              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.MealName))
+              .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.MealCategory));
+
 
             CreateMap<OrderCreationDto, Order>(); // We'll customize this in service layer since it needs extra logic
 
             //Payment DTO <-> Payment Entity
             CreateMap<Payment, PaymentDto>().ReverseMap();
             CreateMap<CreatePaymentDto, Payment>();
-            CreateMap<Payment, PaymentResponseDto>();
+            CreateMap<Payment, PaymentResponseDto>()
+            .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.SubscriptionPlan != null ? src.SubscriptionPlan.PlanName : null))
+            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CorporateCompany != null ? src.CorporateCompany.CompanyName : null));
+
 
             CreateMap<Employee, EmployeeDto>()
             .ForMember(dest => dest.CompanyID, opt => opt.MapFrom(src => src.CompanyID));

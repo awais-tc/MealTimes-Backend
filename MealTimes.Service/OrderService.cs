@@ -10,17 +10,23 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IMealRepository _mealRepository;
+    private readonly IDeliveryRepository _deliveryRepository;
+    private readonly ICorporateCompanyRepository _corporateCompanyRepository;
     private readonly IMapper _mapper;
 
     public OrderService(
         IOrderRepository orderRepository,
         IEmployeeRepository employeeRepository,
         IMealRepository mealRepository,
+        IDeliveryRepository deliveryRepo,
+        ICorporateCompanyRepository companyRepo,
         IMapper mapper)
     {
         _orderRepository = orderRepository;
         _employeeRepository = employeeRepository;
         _mealRepository = mealRepository;
+        _deliveryRepository = deliveryRepo;
+        _corporateCompanyRepository = companyRepo;
         _mapper = mapper;
     }
 
@@ -35,6 +41,16 @@ public class OrderService : IOrderService
         if (company == null || company.ActiveSubscriptionPlan == null)
         {
             return GenericResponse<OrderResponseDto>.Fail("Company does not have an active subscription plan");
+        }
+
+        if (!company.PlanStartDate.HasValue || !company.PlanEndDate.HasValue || company.PlanEndDate < DateTime.UtcNow)
+        {
+            company.ActiveSubscriptionPlanID = null;
+            company.PlanStartDate = null;
+            company.PlanEndDate = null;
+            await _corporateCompanyRepository.UpdateAsync(company);
+
+            return GenericResponse<OrderResponseDto>.Fail("The subscription plan has expired and has been deactivated.");
         }
 
         var today = DateTime.UtcNow.Date;
@@ -90,6 +106,18 @@ public class OrderService : IOrderService
         var orders = await _orderRepository.GetOrdersByEmployeeAsync(employeeId);
         var orderDtos = _mapper.Map<List<OrderResponseDto>>(orders);
         return GenericResponse<List<OrderResponseDto>>.Success(orderDtos);
+    }
+
+    public async Task<GenericResponse<OrderTrackingDto>> TrackOrderByTrackingNumberAsync(string trackingNumber)
+    {
+        var delivery = await _deliveryRepository.GetByTrackingNumberAsync(trackingNumber);
+
+        if (delivery == null)
+            return GenericResponse<OrderTrackingDto>.Fail("Tracking number not found.");
+
+        var dto = _mapper.Map<OrderTrackingDto>(delivery);
+
+        return GenericResponse<OrderTrackingDto>.Success(dto);
     }
 
     public async Task<GenericResponse<List<OrderResponseDto>>> GetOrdersForChefAsync(int chefId)

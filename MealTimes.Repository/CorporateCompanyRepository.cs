@@ -17,12 +17,16 @@ namespace MealTimes.Core.Repository
 
         public async Task<CorporateCompany> GetByIdAsync(int id)
         {
-            return await _context.CorporateCompanies.FindAsync(id);
+            return await _context.CorporateCompanies
+                .Include(c => c.ActiveSubscriptionPlan)
+                .FirstOrDefaultAsync(c => c.CompanyID == id);
         }
 
         public async Task<List<CorporateCompany>> GetAllCompaniesAsync()
         {
-            return await _context.CorporateCompanies.ToListAsync();
+            return await _context.CorporateCompanies
+                .Include(c => c.ActiveSubscriptionPlan)
+                .ToListAsync();
         }
 
         public async Task AddAsync(CorporateCompany corporateCompany)

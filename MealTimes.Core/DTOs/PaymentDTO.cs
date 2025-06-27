@@ -33,8 +33,16 @@ namespace MealTimes.Core.DTOs
     public class PaymentResponseDto
     {
         public int PaymentId { get; set; }
-        public string Status { get; set; } = default!;
-        public string? StripePaymentIntentId { get; set; }
+        public decimal PaymentAmount { get; set; }
         public DateTime PaymentDate { get; set; }
+        public string PaymentMethod { get; set; } = string.Empty;
+        public string PaymentStatus { get; set; } = string.Empty;
+        public string? StripeSessionId { get; set; }
+
+        public int? SubscriptionPlanId { get; set; }
+        public string? PlanName { get; set; }
+
+        public int? CorporateCompanyId { get; set; }
+        public string? CompanyName { get; set; }
     }
 }

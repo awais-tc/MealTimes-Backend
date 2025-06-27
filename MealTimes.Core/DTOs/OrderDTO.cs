@@ -26,6 +26,7 @@ namespace MealTimes.Core.DTOs
         public int EmployeeID { get; set; }
         public int ChefID { get; set; }
         public DateTime OrderDate { get; set; }
+        public string? TrackingNumber { get; set; }
 
         public string DeliveryStatus { get; set; }     // Enum as string
         public string PaymentStatus { get; set; }      // Enum as string
@@ -66,5 +67,14 @@ namespace MealTimes.Core.DTOs
         public int OrderId { get; set; }
         public string NewStatus { get; set; } = null!;
         public int ChefId { get; set; } // (optional: extract from JWT if already logged-in chef)
+    }
+
+    public class OrderTrackingDto
+    {
+        public int OrderId { get; set; }
+        public string TrackingNumber { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public DateTime? PickedUpAt { get; set; }
+        public DateTime? DeliveredAt { get; set; }
     }
 }

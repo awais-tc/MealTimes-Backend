@@ -36,7 +36,6 @@ namespace MealTimes.Service
 
             var delivery = _mapper.Map<Delivery>(dto);
             delivery.Status = DeliveryStatus.Assigned;
-            delivery.PickedUpAt = DateTime.UtcNow;
 
             await _deliveryRepository.AddAsync(delivery);
             await _deliveryRepository.SaveChangesAsync();
@@ -54,6 +53,9 @@ namespace MealTimes.Service
                 return GenericResponse<bool>.Fail("Invalid delivery status.");
 
             delivery.Status = parsedStatus;
+
+            if(parsedStatus == DeliveryStatus.Assigned)
+                delivery.PickedUpAt = DateTime.UtcNow;
 
             if (parsedStatus == DeliveryStatus.InTransit)
                 delivery.PickedUpAt ??= DateTime.UtcNow;
