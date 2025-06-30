@@ -34,6 +34,9 @@ namespace MealTimes.Service
             if (order == null)
                 return GenericResponse<DeliveryDto>.Fail("Order not found");
 
+            order.DeliveryStatus = DeliveryStatus.Assigned;
+            await _orderRepository.UpdateAsync(order);
+
             var delivery = _mapper.Map<Delivery>(dto);
             delivery.Status = DeliveryStatus.Assigned;
 

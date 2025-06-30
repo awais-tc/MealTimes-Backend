@@ -81,5 +81,34 @@ namespace MealTimes.API.Controllers
             var response = await _userService.DeleteUserAsync(id);
             return StatusCode(response.StatusCode, response);
         }
+
+        [Authorize]
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var userIdClaim = User.FindFirst("UserID")?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized(new { isSuccess = false, message = "Invalid token or user ID missing." });
+
+            var response = await _userService.GetUserByIdAsync(userId);
+
+            // Wrap the returned DTO in "userDto" if successful
+            if (response.IsSuccess && response.Data != null)
+            {
+                return Ok(new
+                {
+                    isSuccess = true,
+                    message = response.Message,
+                    data = new
+                    {
+                        userDto = response.Data
+                    },
+                    statusCode = 200
+                });
+            }
+
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

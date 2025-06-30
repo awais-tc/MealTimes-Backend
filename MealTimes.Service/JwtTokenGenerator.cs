@@ -28,6 +28,7 @@ namespace MealTimes.Service
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+                new Claim("UserID", user.UserID.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),   // For .NET identity
                 new Claim("role", user.Role)             // For Swagger / JWT reader

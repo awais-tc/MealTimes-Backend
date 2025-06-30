@@ -21,7 +21,7 @@ namespace MealTimes.Controller.Controllers
         /// Assign a delivery to a delivery person (Admin Only)
         /// </summary>
         [HttpPost("assign")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignDelivery([FromBody] DeliveryAssignDto dto)
         {
             var response = await _deliveryService.AssignDeliveryAsync(dto);
