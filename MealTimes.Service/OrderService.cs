@@ -183,4 +183,24 @@ public class OrderService : IOrderService
 
         return GenericResponse<bool>.Success(true, $"Order status updated to {requestedStatus}.");
     }
+
+    public async Task<GenericResponse<string>> CancelOrderAsync(int orderId)
+    {
+        var order = await _orderRepository.GetOrderByIdAsync(orderId);
+        if (order == null)
+            return GenericResponse<string>.Fail("Order not found.");
+
+        // Only allow cancellation if order is still Pending
+        if (order.DeliveryStatus != DeliveryStatus.Pending)
+            return GenericResponse<string>.Fail("Order cannot be canceled as it is already being prepared or delivered.");
+
+        var timeElapsed = DateTime.UtcNow - order.OrderDate;
+        if (timeElapsed.TotalMinutes > 5)
+            return GenericResponse<string>.Fail("Cannot cancel the order after 5 minutes of placing.");
+
+        await _orderRepository.DeleteAsync(order); // or implement a soft delete if needed
+        await _orderRepository.SaveChangesAsync(); // if using UnitOfWork pattern
+
+        return GenericResponse<string>.Success("Order canceled successfully.");
+    }
 }

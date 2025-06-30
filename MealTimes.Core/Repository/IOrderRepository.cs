@@ -16,6 +16,7 @@ namespace MealTimes.Core.Repository
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order> GetOrderByIdAsync(int orderId);
         Task UpdateAsync(Order order);
+        Task DeleteAsync(Order order);
         Task SaveChangesAsync();
     }
 }

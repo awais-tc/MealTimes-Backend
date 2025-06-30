@@ -97,4 +97,13 @@ public class OrderController : ControllerBase
 
         return Ok(response.Data);
     }
+
+    // PATCH: api/order/cancel/{orderId}
+    [HttpPatch("cancel/{orderId}")]
+    [Authorize(Roles = "Employee")]
+    public async Task<IActionResult> CancelOrderAsync(int orderId)
+    {
+        var response = await _orderService.CancelOrderAsync(orderId);
+        return StatusCode(response.StatusCode, response);
+    }
 }

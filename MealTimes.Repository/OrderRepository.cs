@@ -72,6 +72,12 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(o => o.OrderID == orderId);
     }
 
+    public async Task DeleteAsync(Order order)
+    {
+        _context.Orders.Remove(order);
+        await _context.SaveChangesAsync();
+    }
+
     public Task UpdateAsync(Order order)
     {
         _context.Orders.Update(order);

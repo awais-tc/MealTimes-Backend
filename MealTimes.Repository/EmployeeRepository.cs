@@ -28,7 +28,9 @@ namespace MealTimes.Repository
 
         public async Task<Employee?> GetByIdAsync(int employeeId)
         {
-            return await _context.Employees.FindAsync(employeeId);
+            return await _context.Employees
+                .Include(e => e.CorporateCompany)
+                .FirstOrDefaultAsync(e => e.EmployeeID == employeeId);
         }
 
         public async Task<List<Employee>> GetEmployeesByCompanyIdAsync(int companyId)
