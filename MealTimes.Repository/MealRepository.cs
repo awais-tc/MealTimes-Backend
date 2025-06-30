@@ -21,6 +21,13 @@ public class MealRepository : IMealRepository
             .FirstOrDefaultAsync(m => m.MealID == id);
     }
 
+    public async Task<List<Meal>> GetMealsByIdsAsync(List<int> mealIds)
+    {
+        return await _context.Meals
+            .Where(m => mealIds.Contains(m.MealID))
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Meal>> GetAllMealsAsync()
     {
         return await _context.Meals

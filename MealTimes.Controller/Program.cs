@@ -31,7 +31,7 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IHomeChefRepository, HomeChefRepository>();
 builder.Services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
 builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
-
+builder.Services.AddScoped<IDietaryPreferenceRepository, DietaryPreferenceRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -44,6 +44,7 @@ builder.Services.AddScoped<IHomeChefService, HomeChefService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<IDietaryPreferenceService, DietaryPreferenceService>();
 
 
 // Helpers
@@ -117,13 +118,16 @@ builder.Services.AddSwaggerGen(options =>
 // Optional CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173") // your Vite/React URL
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
 });
+
 
 var app = builder.Build();
 
@@ -137,7 +141,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

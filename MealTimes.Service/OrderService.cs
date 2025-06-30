@@ -32,16 +32,14 @@ public class OrderService : IOrderService
 
     public async Task<GenericResponse<OrderResponseDto>> CreateOrderAsync(CreateOrderDto dto)
     {
-        // Get Employee and Company
+        // Step 1: Validate Employee and Company Subscription
         var employee = await _employeeRepository.GetEmployeeWithCompanyAsync(dto.EmployeeID);
         if (employee == null)
             return GenericResponse<OrderResponseDto>.Fail("Employee not found");
 
         var company = employee.CorporateCompany;
         if (company == null || company.ActiveSubscriptionPlan == null)
-        {
             return GenericResponse<OrderResponseDto>.Fail("Company does not have an active subscription plan");
-        }
 
         if (!company.PlanStartDate.HasValue || !company.PlanEndDate.HasValue || company.PlanEndDate < DateTime.UtcNow)
         {
@@ -53,41 +51,69 @@ public class OrderService : IOrderService
             return GenericResponse<OrderResponseDto>.Fail("The subscription plan has expired and has been deactivated.");
         }
 
+        // Step 2: Fetch Employee's existing orders for today
         var today = DateTime.UtcNow.Date;
         var existingOrders = await _orderRepository.GetOrdersByEmployeeAsync(dto.EmployeeID);
+
         var todaysOrders = existingOrders
             .Where(o => o.OrderDate.Date == today)
             .SelectMany(o => o.OrderMeals)
             .ToList();
 
-        // Validate daily meal limit
-        int maxAllowed = company.ActiveSubscriptionPlan.MealLimitPerDay;
-        int mealsRequested = dto.Meals.Count;
-        if ((todaysOrders.Count + mealsRequested) > maxAllowed)
-            return GenericResponse<OrderResponseDto>.Fail($"Daily meal limit exceeded. You can order up to {maxAllowed} meals per day.");
+        // Step 3: Validate meal limit per employee
+        int maxMealsPerDay = company.ActiveSubscriptionPlan.MealLimitPerDay;
+        int requestedMealCount = dto.Meals.Count;
 
-        // Validate for duplicate meals
+        if ((todaysOrders.Count + requestedMealCount) > maxMealsPerDay)
+            return GenericResponse<OrderResponseDto>.Fail($"Daily meal limit exceeded. You can order up to {maxMealsPerDay} meals per day.");
+
+        // Step 4: Validate no duplicate meals today
         foreach (var meal in dto.Meals)
         {
             if (todaysOrders.Any(m => m.MealID == meal.MealID))
-                return GenericResponse<OrderResponseDto>.Fail($"Meal with ID {meal.MealID} already ordered today");
+                return GenericResponse<OrderResponseDto>.Fail($"Meal with ID {meal.MealID} already ordered today.");
         }
 
-        // Auto-assign chef (based on first meal, assuming all meals from the same chef)
-        var firstMeal = await _mealRepository.GetMealByIdAsync(dto.Meals.First().MealID);
-        if (firstMeal == null)
-            return GenericResponse<OrderResponseDto>.Fail("Meal not found");
+        // Step 5: Validate daily employee count limit
+        var companyEmployeeIds = company.Employees.Select(e => e.EmployeeID).ToList();
+        var todaysEmployeeOrders = existingOrders
+            .Where(o => o.OrderDate.Date == today && companyEmployeeIds.Contains(o.EmployeeID))
+            .GroupBy(o => o.EmployeeID)
+            .Select(g => g.Key)
+            .ToList();
 
-        int chefId = firstMeal.ChefID;
+        bool isAlreadyCounted = todaysEmployeeOrders.Contains(dto.EmployeeID);
+        int currentEmployeeCount = todaysEmployeeOrders.Count;
 
-        // Map DTO to Order entity
+        int maxEmployeesPerDay = company.ActiveSubscriptionPlan.MaxEmployees;
+
+        if (!isAlreadyCounted && currentEmployeeCount >= maxEmployeesPerDay)
+        {
+            return GenericResponse<OrderResponseDto>.Fail(
+                $"Daily employee limit reached. Only {maxEmployeesPerDay} employees can place orders today."
+            );
+        }
+
+        // Step 6: Validate all meals belong to same chef
+        var meals = await _mealRepository.GetMealsByIdsAsync(dto.Meals.Select(m => m.MealID).ToList());
+
+        if (meals.Count != dto.Meals.Count)
+            return GenericResponse<OrderResponseDto>.Fail("One or more meals not found.");
+
+        var distinctChefIds = meals.Select(m => m.ChefID).Distinct().ToList();
+        if (distinctChefIds.Count > 1)
+            return GenericResponse<OrderResponseDto>.Fail("All meals in a single order must be from the same HomeChef.");
+
+        int chefId = distinctChefIds.First();
+
+        // Step 7: Create Order
         var newOrder = new Order
         {
             EmployeeID = dto.EmployeeID,
             ChefID = chefId,
             OrderDate = DateTime.UtcNow,
-            DeliveryStatus = DeliveryStatus.Pending, // Enum mapped to string
-            PaymentStatus = PaymentStatus.Succeeded, // Enum mapped to string
+            DeliveryStatus = DeliveryStatus.Pending,
+            PaymentStatus = PaymentStatus.Succeeded,
             OrderMeals = dto.Meals.Select(m => new OrderMeal
             {
                 MealID = m.MealID,

@@ -31,6 +31,7 @@ namespace MealTimes.Repository
         public DbSet<CompanySubscriptionHistory> CompanySubscriptionHistories { get; set; }
         public DbSet<DeliveryPerson> DeliveryPersons { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<DietaryPreference> DietaryPreferences { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -223,6 +224,34 @@ namespace MealTimes.Repository
             modelBuilder.Entity<Delivery>()
                 .Property(d => d.Status)
                 .HasConversion<string>();
+
+            modelBuilder.Entity<DietaryPreference>(entity =>
+            {
+                entity.HasKey(dp => dp.DietaryPreferenceID);
+
+                entity.Property(dp => dp.Allergies)
+                    .HasConversion(
+                        v => string.Join(',', v),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+
+                entity.Property(dp => dp.Preferences)
+                    .HasConversion(
+                        v => string.Join(',', v),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+
+                entity.Property(dp => dp.Restrictions)
+                    .HasConversion(
+                        v => string.Join(',', v),
+                        v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+
+                entity.Property(dp => dp.CustomNotes)
+                    .HasMaxLength(1000);
+
+                entity.HasOne(dp => dp.Employee)
+                    .WithOne(e => e.DietaryPreference)
+                    .HasForeignKey<DietaryPreference>(dp => dp.EmployeeID)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

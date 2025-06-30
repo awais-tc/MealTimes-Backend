@@ -5,6 +5,7 @@ namespace MealTimes.Core.Repository;
 public interface IMealRepository
 {
     Task<Meal> GetMealByIdAsync(int id);
+    Task<List<Meal>> GetMealsByIdsAsync(List<int> mealIds);
     Task<IEnumerable<Meal>> GetAllMealsAsync();
     Task<IEnumerable<Meal>> GetMealsByChefAsync(int chefId);
     Task<IEnumerable<Meal>> FilterMealsAsync(MealFilterDto filter);

@@ -35,5 +35,6 @@ namespace MealTimes.Core.Models
 
         public ICollection<Order> Orders { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; }
+        public DietaryPreference DietaryPreference { get; set; }
     }
 }

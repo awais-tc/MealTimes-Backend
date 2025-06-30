@@ -132,6 +132,8 @@ namespace MealTimes.API.Mapping
 
             CreateMap<Delivery, DeliveryDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<DietaryPreference, DietaryPreferenceDto>().ReverseMap();
         }
     }
 }
