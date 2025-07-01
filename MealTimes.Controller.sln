@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealTimes.Controller", "MealTimes.Controller\MealTimes.Controller.csproj", "{1700890F-B909-4590-A95D-8CC289196295}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealTimes.Service", "MealTimes.Service\MealTimes.Service.csproj", "{BFC3864D-F027-4396-ACC1-9C0BF8030E9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealTimes.Repository", "MealTimes.Repository\MealTimes.Repository.csproj", "{40BE4C68-ED91-4EDC-99D6-D7BE9D3D5E38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealTimes.Service.Tests", "MealTimes.Service.Tests\MealTimes.Service.Tests.csproj", "{7C9FD769-19D4-44A7-A624-924B8A9103FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{40BE4C68-ED91-4EDC-99D6-D7BE9D3D5E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40BE4C68-ED91-4EDC-99D6-D7BE9D3D5E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40BE4C68-ED91-4EDC-99D6-D7BE9D3D5E38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9FD769-19D4-44A7-A624-924B8A9103FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9FD769-19D4-44A7-A624-924B8A9103FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9FD769-19D4-44A7-A624-924B8A9103FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9FD769-19D4-44A7-A624-924B8A9103FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
