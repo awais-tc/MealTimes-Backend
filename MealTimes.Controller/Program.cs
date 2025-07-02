@@ -32,6 +32,7 @@ builder.Services.AddScoped<IHomeChefRepository, HomeChefRepository>();
 builder.Services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
 builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 builder.Services.AddScoped<IDietaryPreferenceRepository, DietaryPreferenceRepository>();
+builder.Services.AddScoped<IPasswordResetRepository, PasswordResetRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -45,6 +46,8 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<IDietaryPreferenceService, DietaryPreferenceService>();
+builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 // Helpers
