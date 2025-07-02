@@ -49,7 +49,6 @@ builder.Services.AddScoped<IDietaryPreferenceService, DietaryPreferenceService>(
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-
 // Helpers
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 // Program.cs or Startup.cs

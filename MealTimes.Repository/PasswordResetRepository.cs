@@ -1,4 +1,4 @@
-﻿using MealTimes.Core.Models;
+using MealTimes.Core.Models;
 using MealTimes.Core.Repository;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿using MealTimes.Core.Service;
+using MealTimes.Core.Service;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
@@ -18,7 +18,7 @@ namespace MealTimes.Service
         {
             var subject = "Password Reset Request - MealTimes";
             var body = GeneratePasswordResetEmailBody(resetLink, userName);
-
+            
             return await SendEmailAsync(toEmail, subject, body);
         }
 

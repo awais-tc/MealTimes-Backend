@@ -1,4 +1,4 @@
-﻿namespace MealTimes.Core.Service
+namespace MealTimes.Core.Service
 {
     public interface IEmailService
     {
