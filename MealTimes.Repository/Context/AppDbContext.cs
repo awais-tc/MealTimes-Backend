@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MealTimes.Core.Models;
 using Microsoft.Extensions.Logging;
@@ -32,6 +32,7 @@ namespace MealTimes.Repository
         public DbSet<DeliveryPerson> DeliveryPersons { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<DietaryPreference> DietaryPreferences { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -251,6 +252,34 @@ namespace MealTimes.Repository
                     .WithOne(e => e.DietaryPreference)
                     .HasForeignKey<DietaryPreference>(dp => dp.EmployeeID)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Password Reset Token configuration
+            modelBuilder.Entity<PasswordResetToken>(entity =>
+            {
+                entity.HasKey(prt => prt.Id);
+
+                entity.Property(prt => prt.Token)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(prt => prt.CreatedAt)
+                    .IsRequired();
+
+                entity.Property(prt => prt.ExpiresAt)
+                    .IsRequired();
+
+                entity.Property(prt => prt.IsUsed)
+                    .HasDefaultValue(false);
+
+                entity.HasOne(prt => prt.User)
+                    .WithMany()
+                    .HasForeignKey(prt => prt.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Index for better performance
+                entity.HasIndex(prt => new { prt.Token, prt.IsUsed, prt.ExpiresAt });
+                entity.HasIndex(prt => prt.UserId);
             });
         }
     }
