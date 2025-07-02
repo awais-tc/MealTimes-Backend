@@ -24,11 +24,13 @@ namespace MealTimes.Repository
         {
             return await _context.PasswordResetTokens
                 .Include(t => t.User)
-                .FirstOrDefaultAsync(t =>
+                .Where(t =>
                     t.Token == token &&
                     t.User.Email == email &&
                     !t.IsUsed &&
-                    t.ExpiresAt > DateTime.UtcNow);
+                    t.ExpiresAt > DateTime.UtcNow)
+                .OrderByDescending(t => t.ExpiresAt)
+                .FirstOrDefaultAsync();
         }
 
         public async Task MarkTokenAsUsedAsync(int tokenId)

@@ -54,7 +54,7 @@ namespace MealTimes.Service
 
                 // Generate secure token
                 var token = GenerateSecureToken();
-                var expiresAt = DateTime.UtcNow.AddMinutes(1); // Token expires in 1 hour
+                var expiresAt = DateTime.UtcNow.AddMinutes(5); // Token expires in 1 hour
 
                 // Create password reset token
                 var resetToken = new PasswordResetToken
