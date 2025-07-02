@@ -21,7 +21,6 @@ namespace MealTimes.Service.Tests
 
         public OrderServiceTests()
         {
-            // 👇 Setup in-memory DbContext for DeliveryRepository
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;

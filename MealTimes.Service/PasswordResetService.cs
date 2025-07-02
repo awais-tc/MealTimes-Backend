@@ -54,7 +54,7 @@ namespace MealTimes.Service
 
                 // Generate secure token
                 var token = GenerateSecureToken();
-                var expiresAt = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour
+                var expiresAt = DateTime.UtcNow.AddMinutes(5);
 
                 // Create password reset token
                 var resetToken = new PasswordResetToken
@@ -124,10 +124,10 @@ namespace MealTimes.Service
                 await _passwordResetRepository.MarkTokenAsUsedAsync(resetToken.Id);
 
                 return GenericResponse<PasswordResetResponseDto>.Success(
-                    new PasswordResetResponseDto 
-                    { 
+                    new PasswordResetResponseDto
+                    {
                         Message = "Password reset successfully. You can now login with your new password.",
-                        IsSuccess = true 
+                        IsSuccess = true
                     });
             }
             catch (Exception ex)
