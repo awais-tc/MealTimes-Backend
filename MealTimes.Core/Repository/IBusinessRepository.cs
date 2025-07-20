@@ -10,7 +10,7 @@ namespace MealTimes.Core.Repository
         Task<List<Commission>> GetCommissionsByChefAsync(int chefId, DateTime? startDate = null, DateTime? endDate = null);
         Task<List<Commission>> GetAllCommissionsAsync(DateTime? startDate = null, DateTime? endDate = null);
         Task<Commission> UpdateCommissionAsync(Commission commission);
-        
+
         // Chef Payout Repository
         Task<ChefPayout> CreateChefPayoutAsync(ChefPayout payout);
         Task<ChefPayout?> GetChefPayoutByIdAsync(int payoutId);
@@ -18,13 +18,13 @@ namespace MealTimes.Core.Repository
         Task<ChefPayout> UpdateChefPayoutAsync(ChefPayout payout);
         Task<List<ChefPayout>> GetPendingPayoutsAsync();
         Task<bool> HasPendingPayoutForPeriodAsync(int chefId, DateTime startDate, DateTime endDate);
-        
+
         // Business Metrics Repository
         Task<BusinessMetrics> CreateBusinessMetricsAsync(BusinessMetrics metrics);
         Task<BusinessMetrics?> GetBusinessMetricsByDateAsync(DateTime date);
         Task<List<BusinessMetrics>> GetBusinessMetricsRangeAsync(DateTime startDate, DateTime endDate);
         Task<BusinessMetrics> UpdateBusinessMetricsAsync(BusinessMetrics metrics);
-        
+
         // Analytics Queries
         Task<decimal> GetTotalRevenueAsync(DateTime? startDate = null, DateTime? endDate = null);
         Task<decimal> GetTotalCommissionRevenueAsync(DateTime? startDate = null, DateTime? endDate = null);
@@ -35,7 +35,7 @@ namespace MealTimes.Core.Repository
         Task<int> GetActiveSubscriptionsCountAsync();
         Task<int> GetActiveChefsCountAsync();
         Task<int> GetActiveEmployeesCountAsync();
-        
+
         Task SaveChangesAsync();
     }
 }

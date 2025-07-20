@@ -38,7 +38,7 @@ namespace MealTimes.Service
 
             // Calculate order total
             var orderAmount = order.OrderMeals.Sum(om => om.Meal.Price * om.Quantity);
-            
+
             // Calculate commission
             var commissionRate = DEFAULT_COMMISSION_RATE;
             var commissionAmount = (orderAmount * commissionRate) / 100;

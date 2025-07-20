@@ -71,10 +71,10 @@ namespace MealTimes.Core.DTOs
     {
         [Required]
         public int PayoutID { get; set; }
-        
+
         [Required]
         public string Status { get; set; } = string.Empty;
-        
+
         public string? PaymentMethod { get; set; }
         public string? PaymentReference { get; set; }
         public string? Notes { get; set; }
@@ -91,7 +91,7 @@ namespace MealTimes.Core.DTOs
         public int TotalActiveSubscriptions { get; set; }
         public decimal AverageOrderValue { get; set; }
         public decimal MonthlyGrowthRate { get; set; }
-        
+
         public List<MonthlyRevenueDto> MonthlyRevenue { get; set; } = new();
         public List<TopChefDto> TopChefs { get; set; } = new();
         public List<TopCompanyDto> TopCompanies { get; set; } = new();
@@ -130,24 +130,24 @@ namespace MealTimes.Core.DTOs
     {
         public DateTime ReportDate { get; set; }
         public string Period { get; set; } = string.Empty; // Daily, Weekly, Monthly, Yearly
-        
+
         // Revenue Breakdown
         public decimal SubscriptionRevenue { get; set; }
         public decimal CommissionRevenue { get; set; }
         public decimal TotalRevenue { get; set; }
-        
+
         // Expense Breakdown
         public decimal ChefPayouts { get; set; }
         public decimal OperationalCosts { get; set; }
         public decimal MarketingCosts { get; set; }
         public decimal TechnologyCosts { get; set; }
         public decimal TotalExpenses { get; set; }
-        
+
         // Profit Analysis
         public decimal GrossProfit { get; set; }
         public decimal NetProfit { get; set; }
         public decimal ProfitMargin { get; set; }
-        
+
         // Key Metrics
         public int TotalOrders { get; set; }
         public decimal AverageOrderValue { get; set; }
