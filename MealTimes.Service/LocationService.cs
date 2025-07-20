@@ -40,7 +40,7 @@ namespace MealTimes.Service
             var location = _mapper.Map<Location>(dto);
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
             var locationDto = _mapper.Map<LocationDto>(createdLocation);
-            
+
             return GenericResponse<LocationDto>.Success(locationDto, "Location created successfully.");
         }
 
@@ -70,7 +70,8 @@ namespace MealTimes.Service
         public async Task<GenericResponse<bool>> DeleteLocationAsync(int locationId)
         {
             var result = await _locationRepository.DeleteLocationAsync(locationId);
-            return result 
+
+            return result
                 ? GenericResponse<bool>.Success(true, "Location deleted successfully.")
                 : GenericResponse<bool>.Fail("Location not found or could not be deleted.");
         }
@@ -176,7 +177,7 @@ namespace MealTimes.Service
             var nearbyMeals = await _locationRepository.GetNearbyMeals(
                 filter.Latitude, filter.Longitude, filter.RadiusKm);
 
-            var mealDtos = nearbyMeals.Select(meal => 
+            var mealDtos = nearbyMeals.Select(meal =>
             {
                 var dto = _mapper.Map<MealDto>(meal);
                 // Add distance information
@@ -214,9 +215,10 @@ namespace MealTimes.Service
         {
             var location = _mapper.Map<Location>(locationDto);
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
-            
+
             var result = await _locationRepository.AssignLocationToChef(chefId, createdLocation.LocationID);
-            return result 
+            
+            return result
                 ? GenericResponse<bool>.Success(true, "Location assigned to chef successfully.")
                 : GenericResponse<bool>.Fail("Failed to assign location to chef.");
         }
@@ -225,9 +227,10 @@ namespace MealTimes.Service
         {
             var location = _mapper.Map<Location>(locationDto);
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
-            
+
             var result = await _locationRepository.AssignLocationToCompany(companyId, createdLocation.LocationID);
-            return result 
+            
+            return result
                 ? GenericResponse<bool>.Success(true, "Location assigned to company successfully.")
                 : GenericResponse<bool>.Fail("Failed to assign location to company.");
         }
@@ -236,9 +239,10 @@ namespace MealTimes.Service
         {
             var location = _mapper.Map<Location>(locationDto);
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
-            
+
             var result = await _locationRepository.AssignLocationToEmployee(employeeId, createdLocation.LocationID);
-            return result 
+            
+            return result
                 ? GenericResponse<bool>.Success(true, "Location assigned to employee successfully.")
                 : GenericResponse<bool>.Fail("Failed to assign location to employee.");
         }

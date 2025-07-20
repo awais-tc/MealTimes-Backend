@@ -19,7 +19,7 @@ namespace MealTimes.Repository
         {
             location.CreatedAt = DateTime.UtcNow;
             location.UpdatedAt = DateTime.UtcNow;
-            
+
             await _context.Locations.AddAsync(location);
             await _context.SaveChangesAsync();
             return location;
@@ -62,8 +62,9 @@ namespace MealTimes.Repository
                 .ToListAsync();
 
             // Filter by exact distance using Haversine formula
-            return chefs.Where(c => 
-                LocationHelper.IsWithinRadius(latitude, longitude, 
+            return chefs.Where(c =>
+                LocationHelper.IsWithinRadius(latitude, longitude,
+
                     c.Location!.Latitude, c.Location.Longitude, radiusKm))
                 .ToList();
         }
@@ -81,7 +82,7 @@ namespace MealTimes.Repository
                            m.Chef.Location.Longitude >= minLon && m.Chef.Location.Longitude <= maxLon)
                 .ToListAsync();
 
-            return meals.Where(m => 
+            return meals.Where(m =>
                 LocationHelper.IsWithinRadius(latitude, longitude,
                     m.Chef.Location!.Latitude, m.Chef.Location.Longitude, radiusKm))
                 .ToList();

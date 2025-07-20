@@ -9,6 +9,10 @@ namespace MealTimes.Core.Repository
         Task<Location?> GetLocationByIdAsync(int locationId);
         Task<Location> UpdateLocationAsync(Location location);
         Task<bool> DeleteLocationAsync(int locationId);
+
+        // Spatial queries
+        Task<List<HomeChef>> GetNearbyChefs(double latitude, double longitude, double radiusKm);
+        Task<List<Meal>> GetNearbyMeals(double latitude, double longitude, double radiusKm);
         
         // Spatial queries
         Task<List<HomeChef>> GetNearbyChefs(double latitude, double longitude, double radiusKm);
@@ -18,7 +22,7 @@ namespace MealTimes.Core.Repository
         Task<bool> AssignLocationToChef(int chefId, int locationId);
         Task<bool> AssignLocationToCompany(int companyId, int locationId);
         Task<bool> AssignLocationToEmployee(int employeeId, int locationId);
-        
+      
         Task SaveChangesAsync();
     }
 }
