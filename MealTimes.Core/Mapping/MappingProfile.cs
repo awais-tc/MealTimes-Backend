@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MealTimes.Core.DTOs;
 using MealTimes.Core.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -140,6 +140,16 @@ namespace MealTimes.API.Mapping
             CreateMap<CreateLocationDto, Location>();
             CreateMap<UpdateLocationDto, Location>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Business mappings
+            CreateMap<Commission, CommissionDto>()
+                .ForMember(dest => dest.ChefName, opt => opt.MapFrom(src => src.Chef.FullName));
+
+            CreateMap<BusinessMetrics, BusinessMetricsDto>().ReverseMap();
+
+            CreateMap<ChefPayout, ChefPayoutDto>()
+                .ForMember(dest => dest.ChefName, opt => opt.MapFrom(src => src.Chef.FullName))
+                .ForMember(dest => dest.TotalOrders, opt => opt.MapFrom(src => src.Commissions.Count));
         }
     }
 }
