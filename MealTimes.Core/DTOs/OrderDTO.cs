@@ -46,6 +46,7 @@ namespace MealTimes.Core.DTOs
     {
         public int EmployeeID { get; set; }
         public List<MealOrderDto> Meals { get; set; }
+        public double? MaxDeliveryDistanceKm { get; set; } = 20; // Default 20km radius
     }
 
     public class MealOrderDto

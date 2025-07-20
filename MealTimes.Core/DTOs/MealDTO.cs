@@ -39,6 +39,8 @@ namespace MealTimes.Core.DTOs
         public string ChefName { get; set; }
         public bool Availability { get; set; }
         public double Rating { get; set; }
+        public double? DistanceKm { get; set; }
+        public LocationDto? ChefLocation { get; set; }
     }
 
     public class MealFilterDto

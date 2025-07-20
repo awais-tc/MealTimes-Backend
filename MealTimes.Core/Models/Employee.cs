@@ -29,6 +29,10 @@ namespace MealTimes.Core.Models
 
         public string? DietaryPreferences { get; set; }
 
+        public int? LocationID { get; set; }
+        [ForeignKey("LocationID")]
+        public virtual Location? Location { get; set; }
+
         public int UserID { get; set; }
         [ForeignKey("UserID")]
         public virtual User User { get; set; }

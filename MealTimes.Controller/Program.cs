@@ -34,6 +34,11 @@ builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 builder.Services.AddScoped<IDietaryPreferenceRepository, DietaryPreferenceRepository>();
 builder.Services.AddScoped<IPasswordResetRepository, PasswordResetRepository>();
 
+// Location services
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddHttpClient<ILocationService, LocationService>();
+
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMealService, MealService>();

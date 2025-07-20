@@ -33,6 +33,7 @@ namespace MealTimes.Repository
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<DietaryPreference> DietaryPreferences { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -281,6 +282,61 @@ namespace MealTimes.Repository
                 entity.HasIndex(prt => new { prt.Token, prt.IsUsed, prt.ExpiresAt });
                 entity.HasIndex(prt => prt.UserId);
             });
+
+            // Location configuration
+            modelBuilder.Entity<Location>(entity =>
+            {
+                entity.HasKey(l => l.LocationID);
+
+                entity.Property(l => l.Latitude)
+                    .IsRequired()
+                    .HasPrecision(10, 8);
+
+                entity.Property(l => l.Longitude)
+                    .IsRequired()
+                    .HasPrecision(11, 8);
+
+                entity.Property(l => l.FormattedAddress)
+                    .HasMaxLength(500);
+
+                entity.Property(l => l.City)
+                    .HasMaxLength(100);
+
+                entity.Property(l => l.State)
+                    .HasMaxLength(100);
+
+                entity.Property(l => l.PostalCode)
+                    .HasMaxLength(20);
+
+                entity.Property(l => l.Country)
+                    .HasMaxLength(100);
+
+                // Indexes for spatial queries
+                entity.HasIndex(l => new { l.Latitude, l.Longitude });
+                entity.HasIndex(l => l.City);
+                entity.HasIndex(l => l.State);
+            });
+
+            // HomeChef to Location relationship
+            modelBuilder.Entity<HomeChef>()
+                .HasOne(h => h.Location)
+                .WithMany(l => l.HomeChefs)
+                .HasForeignKey(h => h.LocationID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // CorporateCompany to Location relationship
+            modelBuilder.Entity<CorporateCompany>()
+                .HasOne(c => c.Location)
+                .WithMany(l => l.CorporateCompanies)
+                .HasForeignKey(c => c.LocationID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Employee to Location relationship
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Location)
+                .WithMany(l => l.Employees)
+                .HasForeignKey(e => e.LocationID)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

@@ -30,6 +30,10 @@ namespace MealTimes.Core.Models
         public DateTime? PlanStartDate { get; set; }
         public DateTime? PlanEndDate { get; set; }
 
+        public int? LocationID { get; set; }
+        [ForeignKey("LocationID")]
+        public virtual Location? Location { get; set; }
+
         public int UserID { get; set; }
 
         [ForeignKey("UserID")]
