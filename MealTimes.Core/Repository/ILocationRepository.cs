@@ -14,10 +14,6 @@ namespace MealTimes.Core.Repository
         Task<List<HomeChef>> GetNearbyChefs(double latitude, double longitude, double radiusKm);
         Task<List<Meal>> GetNearbyMeals(double latitude, double longitude, double radiusKm);
         
-        // Spatial queries
-        Task<List<HomeChef>> GetNearbyChefs(double latitude, double longitude, double radiusKm);
-        Task<List<Meal>> GetNearbyMeals(double latitude, double longitude, double radiusKm);
-        
         // Location assignments
         Task<bool> AssignLocationToChef(int chefId, int locationId);
         Task<bool> AssignLocationToCompany(int companyId, int locationId);

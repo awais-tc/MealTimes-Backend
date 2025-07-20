@@ -14,10 +14,6 @@ namespace MealTimes.Core.Service
         Task<GenericResponse<GeocodeResponseDto>> GeocodeAddressAsync(string address);
         Task<GenericResponse<GeocodeResponseDto>> ReverseGeocodeAsync(double latitude, double longitude);
         
-        // Geocoding services
-        Task<GenericResponse<GeocodeResponseDto>> GeocodeAddressAsync(string address);
-        Task<GenericResponse<GeocodeResponseDto>> ReverseGeocodeAsync(double latitude, double longitude);
-        
         // Location-based queries
         Task<GenericResponse<List<NearbyChefDto>>> GetNearbyChefs(LocationFilterDto filter);
         Task<GenericResponse<List<MealDto>>> GetNearbyMeals(LocationFilterDto filter);
