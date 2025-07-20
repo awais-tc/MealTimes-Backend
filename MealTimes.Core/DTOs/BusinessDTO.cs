@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace MealTimes.Core.DTOs
 {
@@ -56,13 +56,13 @@ namespace MealTimes.Core.DTOs
     {
         [Required]
         public int ChefID { get; set; }
-
+        
         [Required]
         public string PayoutPeriod { get; set; } = string.Empty; // Weekly, Monthly
-
+        
         [Required]
         public DateTime PeriodStart { get; set; }
-
+        
         [Required]
         public DateTime PeriodEnd { get; set; }
     }

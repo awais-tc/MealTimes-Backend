@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MealTimes.Core.DTOs;
 using MealTimes.Core.Models;
 using MealTimes.Core.Repository;

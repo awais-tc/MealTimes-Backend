@@ -1,4 +1,4 @@
-﻿using MealTimes.Core.Models;
+using MealTimes.Core.Models;
 
 namespace MealTimes.Core.Repository
 {

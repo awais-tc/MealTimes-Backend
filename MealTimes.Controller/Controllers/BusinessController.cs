@@ -1,4 +1,4 @@
-﻿using MealTimes.Core.DTOs;
+using MealTimes.Core.DTOs;
 using MealTimes.Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

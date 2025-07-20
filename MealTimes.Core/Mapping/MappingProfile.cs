@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MealTimes.Core.DTOs;
 using MealTimes.Core.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
