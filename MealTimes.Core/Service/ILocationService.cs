@@ -1,4 +1,4 @@
-﻿using MealTimes.Core.DTOs;
+using MealTimes.Core.DTOs;
 using MealTimes.Core.Responses;
 
 namespace MealTimes.Core.Service
@@ -13,7 +13,11 @@ namespace MealTimes.Core.Service
         // Geocoding services
         Task<GenericResponse<GeocodeResponseDto>> GeocodeAddressAsync(string address);
         Task<GenericResponse<GeocodeResponseDto>> ReverseGeocodeAsync(double latitude, double longitude);
-
+        
+        // Geocoding services
+        Task<GenericResponse<GeocodeResponseDto>> GeocodeAddressAsync(string address);
+        Task<GenericResponse<GeocodeResponseDto>> ReverseGeocodeAsync(double latitude, double longitude);
+        
         // Location-based queries
         Task<GenericResponse<List<NearbyChefDto>>> GetNearbyChefs(LocationFilterDto filter);
         Task<GenericResponse<List<MealDto>>> GetNearbyMeals(LocationFilterDto filter);

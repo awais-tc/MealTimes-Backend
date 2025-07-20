@@ -1,4 +1,4 @@
-﻿using MealTimes.Core.DTOs;
+using MealTimes.Core.DTOs;
 using MealTimes.Core.Helpers;
 using MealTimes.Core.Models;
 using MealTimes.Core.Repository;
@@ -64,6 +64,7 @@ namespace MealTimes.Repository
             // Filter by exact distance using Haversine formula
             return chefs.Where(c =>
                 LocationHelper.IsWithinRadius(latitude, longitude,
+
                     c.Location!.Latitude, c.Location.Longitude, radiusKm))
                 .ToList();
         }

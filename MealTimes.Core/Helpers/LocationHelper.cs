@@ -1,4 +1,4 @@
-﻿namespace MealTimes.Core.Helpers
+namespace MealTimes.Core.Helpers
 {
     public static class LocationHelper
     {

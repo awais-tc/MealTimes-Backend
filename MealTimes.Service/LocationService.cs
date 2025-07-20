@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MealTimes.Core.DTOs;
 using MealTimes.Core.Helpers;
 using MealTimes.Core.Models;
@@ -70,6 +70,7 @@ namespace MealTimes.Service
         public async Task<GenericResponse<bool>> DeleteLocationAsync(int locationId)
         {
             var result = await _locationRepository.DeleteLocationAsync(locationId);
+
             return result
                 ? GenericResponse<bool>.Success(true, "Location deleted successfully.")
                 : GenericResponse<bool>.Fail("Location not found or could not be deleted.");
@@ -216,6 +217,7 @@ namespace MealTimes.Service
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
 
             var result = await _locationRepository.AssignLocationToChef(chefId, createdLocation.LocationID);
+            
             return result
                 ? GenericResponse<bool>.Success(true, "Location assigned to chef successfully.")
                 : GenericResponse<bool>.Fail("Failed to assign location to chef.");
@@ -227,6 +229,7 @@ namespace MealTimes.Service
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
 
             var result = await _locationRepository.AssignLocationToCompany(companyId, createdLocation.LocationID);
+            
             return result
                 ? GenericResponse<bool>.Success(true, "Location assigned to company successfully.")
                 : GenericResponse<bool>.Fail("Failed to assign location to company.");
@@ -238,6 +241,7 @@ namespace MealTimes.Service
             var createdLocation = await _locationRepository.CreateLocationAsync(location);
 
             var result = await _locationRepository.AssignLocationToEmployee(employeeId, createdLocation.LocationID);
+            
             return result
                 ? GenericResponse<bool>.Success(true, "Location assigned to employee successfully.")
                 : GenericResponse<bool>.Fail("Failed to assign location to employee.");
