@@ -23,6 +23,10 @@ namespace MealTimes.Core.Models
 
         public double Rating { get; set; } = 0.0;
 
+        public int? LocationID { get; set; }
+        [ForeignKey("LocationID")]
+        public virtual Location? Location { get; set; }
+
         public int UserID { get; set; }
         [ForeignKey("UserID")]
         public virtual User User { get; set; }

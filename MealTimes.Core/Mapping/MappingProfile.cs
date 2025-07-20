@@ -134,6 +134,12 @@ namespace MealTimes.API.Mapping
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 
             CreateMap<DietaryPreference, DietaryPreferenceDto>().ReverseMap();
+
+            // Location mappings
+            CreateMap<Location, LocationDto>().ReverseMap();
+            CreateMap<CreateLocationDto, Location>();
+            CreateMap<UpdateLocationDto, Location>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

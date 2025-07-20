@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MealTimes.Core.DTOs;
+using MealTimes.Core.Helpers;
 using MealTimes.Core.Models;
 using MealTimes.Core.Repository;
 using MealTimes.Core.Responses;
@@ -99,6 +100,24 @@ public class OrderService : IOrderService
 
         if (meals.Count != dto.Meals.Count)
             return GenericResponse<OrderResponseDto>.Fail("One or more meals not found.");
+
+        // Step 6.5: Check delivery distance if specified
+        if (dto.MaxDeliveryDistanceKm.HasValue)
+        {
+            var chef = meals.First().Chef;
+            if (chef.Location != null && employee.Location != null)
+            {
+                var distance = LocationHelper.CalculateDistance(
+                    chef.Location.Latitude, chef.Location.Longitude,
+                    employee.Location.Latitude, employee.Location.Longitude);
+
+                if (distance > dto.MaxDeliveryDistanceKm.Value)
+                {
+                    return GenericResponse<OrderResponseDto>.Fail(
+                        $"Chef is too far away. Distance: {distance:F2}km, Maximum allowed: {dto.MaxDeliveryDistanceKm.Value}km");
+                }
+            }
+        }
 
         var distinctChefIds = meals.Select(m => m.ChefID).Distinct().ToList();
         if (distinctChefIds.Count > 1)
