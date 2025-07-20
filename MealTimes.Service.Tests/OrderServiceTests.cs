@@ -14,10 +14,12 @@ namespace MealTimes.Service.Tests
         private readonly Mock<IEmployeeRepository> _employeeRepoMock = new();
         private readonly Mock<IMealRepository> _mealRepoMock = new();
         private readonly Mock<ICorporateCompanyRepository> _companyRepoMock = new();
+        private readonly Mock<IBusinessRepository> _businessRepoMock = new();
         private readonly Mock<IMapper> _mapperMock = new();
 
         private readonly DeliveryRepository _deliveryRepo;
         private readonly OrderService _orderService;
+        private readonly BusinessService _businessService;
 
         public OrderServiceTests()
         {
@@ -33,6 +35,7 @@ namespace MealTimes.Service.Tests
                 _mealRepoMock.Object,
                 _deliveryRepo, 
                 _companyRepoMock.Object,
+                _businessService,
                 _mapperMock.Object);
         }
 

@@ -34,6 +34,9 @@ namespace MealTimes.Repository
         public DbSet<DietaryPreference> DietaryPreferences { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Commission> Commissions { get; set; }
+        public DbSet<BusinessMetrics> BusinessMetrics { get; set; }
+        public DbSet<ChefPayout> ChefPayouts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -281,6 +284,139 @@ namespace MealTimes.Repository
                 // Index for better performance
                 entity.HasIndex(prt => new { prt.Token, prt.IsUsed, prt.ExpiresAt });
                 entity.HasIndex(prt => prt.UserId);
+            });
+
+            // Commission configuration
+            modelBuilder.Entity<Commission>(entity =>
+            {
+                entity.HasKey(c => c.CommissionID);
+
+                entity.Property(c => c.OrderAmount)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(c => c.CommissionRate)
+                    .HasColumnType("decimal(5,2)")
+                    .IsRequired();
+
+                entity.Property(c => c.CommissionAmount)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(c => c.ChefPayableAmount)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(c => c.PlatformEarning)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(c => c.Status)
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Pending");
+
+                entity.HasOne(c => c.Order)
+                    .WithOne()
+                    .HasForeignKey<Commission>(c => c.OrderID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(c => c.Chef)
+                    .WithMany()
+                    .HasForeignKey(c => c.ChefID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(c => c.OrderID).IsUnique();
+                entity.HasIndex(c => new { c.ChefID, c.CreatedAt });
+            });
+
+            // Business Metrics configuration
+            modelBuilder.Entity<BusinessMetrics>(entity =>
+            {
+                entity.HasKey(bm => bm.MetricsID);
+
+                entity.Property(bm => bm.Date)
+                    .IsRequired();
+
+                entity.Property(bm => bm.SubscriptionRevenue)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.CommissionRevenue)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.TotalRevenue)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.ChefPayouts)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.OperationalCosts)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.TotalExpenses)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.NetProfit)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.ProfitMargin)
+                    .HasColumnType("decimal(5,2)")
+                    .HasDefaultValue(0);
+
+                entity.Property(bm => bm.AverageOrderValue)
+                    .HasColumnType("decimal(18,2)")
+                    .HasDefaultValue(0);
+
+                entity.HasIndex(bm => bm.Date).IsUnique();
+            });
+
+            // Chef Payout configuration
+            modelBuilder.Entity<ChefPayout>(entity =>
+            {
+                entity.HasKey(cp => cp.PayoutID);
+
+                entity.Property(cp => cp.TotalEarnings)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(cp => cp.CommissionDeducted)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(cp => cp.PayableAmount)
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                entity.Property(cp => cp.PayoutPeriod)
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(cp => cp.Status)
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Pending");
+
+                entity.Property(cp => cp.PaymentMethod)
+                    .HasMaxLength(100);
+
+                entity.Property(cp => cp.PaymentReference)
+                    .HasMaxLength(200);
+
+                entity.Property(cp => cp.Notes)
+                    .HasMaxLength(1000);
+
+                entity.HasOne(cp => cp.Chef)
+                    .WithMany()
+                    .HasForeignKey(cp => cp.ChefID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(cp => new { cp.ChefID, cp.PeriodStart, cp.PeriodEnd });
+                entity.HasIndex(cp => cp.Status);
             });
 
             // Location configuration

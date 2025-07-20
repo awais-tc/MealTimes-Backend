@@ -5,6 +5,8 @@ using MealTimes.Core.Models;
 using MealTimes.Core.Repository;
 using MealTimes.Core.Responses;
 using MealTimes.Core.Service;
+using System.Security.Cryptography;
+using System.Text;
 
 public class OrderService : IOrderService
 {
@@ -13,6 +15,7 @@ public class OrderService : IOrderService
     private readonly IMealRepository _mealRepository;
     private readonly IDeliveryRepository _deliveryRepository;
     private readonly ICorporateCompanyRepository _corporateCompanyRepository;
+    private readonly IBusinessService _businessService;
     private readonly IMapper _mapper;
 
     public OrderService(
@@ -21,6 +24,7 @@ public class OrderService : IOrderService
         IMealRepository mealRepository,
         IDeliveryRepository deliveryRepo,
         ICorporateCompanyRepository companyRepo,
+        IBusinessService businessService,
         IMapper mapper)
     {
         _orderRepository = orderRepository;
@@ -28,6 +32,7 @@ public class OrderService : IOrderService
         _mealRepository = mealRepository;
         _deliveryRepository = deliveryRepo;
         _corporateCompanyRepository = companyRepo;
+        _businessService = businessService;
         _mapper = mapper;
     }
 
@@ -141,6 +146,20 @@ public class OrderService : IOrderService
         };
 
         var savedOrder = await _orderRepository.CreateOrderAsync(newOrder);
+
+        // Calculate commission for the order
+        await _businessService.CalculateCommissionAsync(savedOrder.OrderID);
+
+        // Create delivery tracking
+        var delivery = new Delivery
+        {
+            OrderID = savedOrder.OrderID,
+            Status = DeliveryStatus.Pending,
+            TrackingNumber = GenerateTrackingNumber()
+        };
+        await _deliveryRepository.AddAsync(delivery);
+        await _deliveryRepository.SaveChangesAsync();
+
         var orderDto = _mapper.Map<OrderResponseDto>(savedOrder);
 
         return GenericResponse<OrderResponseDto>.Success(orderDto, "Order placed successfully");
@@ -247,5 +266,13 @@ public class OrderService : IOrderService
         await _orderRepository.SaveChangesAsync(); // if using UnitOfWork pattern
 
         return GenericResponse<string>.Success("Order canceled successfully.");
+    }
+
+    private string GenerateTrackingNumber()
+    {
+        using var rng = RandomNumberGenerator.Create();
+        var bytes = new byte[8];
+        rng.GetBytes(bytes);
+        return "MT" + Convert.ToHexString(bytes).ToUpper();
     }
 }
