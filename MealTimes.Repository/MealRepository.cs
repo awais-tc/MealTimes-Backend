@@ -24,6 +24,8 @@ public class MealRepository : IMealRepository
     public async Task<List<Meal>> GetMealsByIdsAsync(List<int> mealIds)
     {
         return await _context.Meals
+            .Include(m => m.Chef)
+            .ThenInclude(c => c.Location)      
             .Where(m => mealIds.Contains(m.MealID))
             .ToListAsync();
     }
