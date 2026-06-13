@@ -12,12 +12,16 @@ using Stripe;
 using System.Text;
 using TheMealTimes.Repositories;
 
+// Load a local .env file (if present) into environment variables before building config.
+// Walks up the directory tree to find it, so it works from either the project or repo root.
+// On Render no .env exists — vars come from the dashboard — and this call is a harmless no-op.
+DotNetEnv.Env.TraversePath().Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Npgsql (PostgreSQL) maps DateTime to 'timestamp with time zone' and otherwise
-// requires UTC values. This legacy switch preserves the SQL Server-style behavior
-// (accepts unspecified/local DateTime), avoiding runtime errors after the migration.
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+// Note: the Npgsql legacy-timestamp compatibility switch is set in
+// MealTimes.Repository/NpgsqlCompatibility.cs (a ModuleInitializer) so that it
+// applies consistently at runtime, design-time, and during EF migration tooling.
 
 // Render assigns the port to listen on via the PORT environment variable.
 var port = Environment.GetEnvironmentVariable("PORT");

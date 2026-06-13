@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MealTimes.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260613100941_InitialPostgres")]
+    [Migration("20260613104603_InitialPostgres")]
     partial class InitialPostgres
     {
         /// <inheritdoc />
@@ -84,10 +84,10 @@ namespace MealTimes.Repository.Migrations
                         .HasDefaultValue(0m);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("NetProfit")
                         .ValueGeneratedOnAdd()
@@ -123,7 +123,7 @@ namespace MealTimes.Repository.Migrations
                         .HasDefaultValue(0m);
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("MetricsID");
 
@@ -148,7 +148,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(1000)
@@ -171,13 +171,13 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("PeriodEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("PeriodStart")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("ProcessedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -222,7 +222,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("OrderAmount")
                         .HasColumnType("decimal(18,2)");
@@ -231,7 +231,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("PaidAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PaymentReference")
                         .HasColumnType("text");
@@ -270,10 +270,10 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("EndedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("SubscribedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SubscriptionPlanID")
                         .HasColumnType("integer");
@@ -321,10 +321,10 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("PlanEndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("PlanStartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("SubscriptionPlanID")
                         .HasColumnType("integer");
@@ -357,7 +357,7 @@ namespace MealTimes.Repository.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DeliveryID"));
 
                     b.Property<DateTime?>("DeliveredAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("DeliveryPersonID")
                         .HasColumnType("integer");
@@ -370,7 +370,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("PickedUpAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -598,7 +598,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FormattedAddress")
                         .HasMaxLength(500)
@@ -621,7 +621,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("LocationID");
 
@@ -698,7 +698,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
@@ -740,10 +740,10 @@ namespace MealTimes.Repository.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsUsed")
                         .ValueGeneratedOnAdd()
@@ -756,7 +756,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("UsedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -788,7 +788,7 @@ namespace MealTimes.Repository.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()

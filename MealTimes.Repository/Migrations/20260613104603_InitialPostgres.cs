@@ -18,7 +18,7 @@ namespace MealTimes.Repository.Migrations
                 {
                     MetricsID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     SubscriptionRevenue = table.Column<decimal>(type: "numeric(18,2)", nullable: false, defaultValue: 0m),
                     CommissionRevenue = table.Column<decimal>(type: "numeric(18,2)", nullable: false, defaultValue: 0m),
                     TotalRevenue = table.Column<decimal>(type: "numeric(18,2)", nullable: false, defaultValue: 0m),
@@ -32,8 +32,8 @@ namespace MealTimes.Repository.Migrations
                     ActiveChefs = table.Column<int>(type: "integer", nullable: false),
                     ActiveEmployees = table.Column<int>(type: "integer", nullable: false),
                     AverageOrderValue = table.Column<decimal>(type: "numeric(18,2)", nullable: false, defaultValue: 0m),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,8 +53,8 @@ namespace MealTimes.Repository.Migrations
                     State = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     PostalCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
                     Country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -178,10 +178,10 @@ namespace MealTimes.Repository.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     Token = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsUsed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    UsedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    UsedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -206,8 +206,8 @@ namespace MealTimes.Repository.Migrations
                     Address = table.Column<string>(type: "text", nullable: false),
                     AdminID = table.Column<int>(type: "integer", nullable: true),
                     ActiveSubscriptionPlanID = table.Column<int>(type: "integer", nullable: true),
-                    PlanStartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    PlanEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PlanStartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    PlanEndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LocationID = table.Column<int>(type: "integer", nullable: true),
                     UserID = table.Column<int>(type: "integer", nullable: false),
                     SubscriptionPlanID = table.Column<int>(type: "integer", nullable: true)
@@ -257,11 +257,11 @@ namespace MealTimes.Repository.Migrations
                     CommissionDeducted = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     PayableAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     PayoutPeriod = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    PeriodStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PeriodEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PeriodStart = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    PeriodEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false, defaultValue: "Pending"),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ProcessedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ProcessedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     PaymentMethod = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     PaymentReference = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     Notes = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
@@ -312,8 +312,8 @@ namespace MealTimes.Repository.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CorporateCompanyId = table.Column<int>(type: "integer", nullable: false),
                     SubscriptionPlanID = table.Column<int>(type: "integer", nullable: false),
-                    SubscribedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    SubscribedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    EndedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -400,7 +400,7 @@ namespace MealTimes.Repository.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EmployeeID = table.Column<int>(type: "integer", nullable: false),
                     ChefID = table.Column<int>(type: "integer", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     DeliveryStatus = table.Column<string>(type: "text", nullable: false),
                     PaymentStatus = table.Column<string>(type: "text", nullable: false)
                 },
@@ -432,9 +432,9 @@ namespace MealTimes.Repository.Migrations
                     CommissionAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     ChefPayableAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     PlatformEarning = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false, defaultValue: "Pending"),
-                    PaidAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PaidAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     PaymentReference = table.Column<string>(type: "text", nullable: true),
                     ChefPayoutPayoutID = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -471,8 +471,8 @@ namespace MealTimes.Repository.Migrations
                     DeliveryServiceName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     TrackingNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Status = table.Column<string>(type: "text", nullable: false),
-                    PickedUpAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeliveredAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    PickedUpAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeliveredAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -554,7 +554,7 @@ namespace MealTimes.Repository.Migrations
                     SubscriptionPlanID = table.Column<int>(type: "integer", nullable: true),
                     CorporateCompanyID = table.Column<int>(type: "integer", nullable: true),
                     PaymentAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     PaymentMethod = table.Column<string>(type: "text", nullable: false),
                     PaymentStatus = table.Column<string>(type: "text", nullable: false),
                     StripeSessionId = table.Column<string>(type: "text", nullable: true)
