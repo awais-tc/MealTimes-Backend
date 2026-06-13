@@ -1,7 +1,9 @@
 # MealTimes — Deployment Guide
 
-Backend → **Render** (Docker) + **Render PostgreSQL**
-Frontend → **Vercel**
+Backend → **Render** (Docker) · Database → **Neon** (PostgreSQL) · Frontend → **Vercel**
+
+> Neon is used for the database instead of Render's free Postgres because Render's free
+> database is deleted after ~30 days, while Neon's free tier is permanent (no card required).
 
 The code is already prepared for deployment:
 - EF Core switched from SQL Server to **PostgreSQL** (Npgsql).
@@ -20,15 +22,25 @@ Do **not** commit the new key. (The *publishable* key `pk_...` is safe to be pub
 
 ---
 
-## 1. Create the database (Render PostgreSQL)
+## 1. Create the database (Neon PostgreSQL)
 
-1. Sign up / log in at https://render.com (use "Sign in with GitHub").
-2. **New +** → **PostgreSQL**.
-3. Name: `mealtimes-db` · Region: closest to you · Plan: **Free**.
-4. Click **Create Database** and wait until status is *Available*.
-5. Open the DB page → copy the **Internal Database URL** (looks like
-   `postgresql://user:pass@dpg-xxxx/mealtimes`). You'll paste it into the backend as `DATABASE_URL`.
-   - Use the **Internal** URL because the web service runs inside Render (faster, free).
+1. Sign up / log in at https://neon.tech (Sign in with GitHub).
+2. **Create project** → name `mealtimes` → pick a region (e.g. `us-east-1`).
+3. On the project page open **Connect** / **Connection Details** and copy the **full connection
+   string**. It looks like:
+   ```
+   postgresql://USER:PASSWORD@ep-xxxx-pooler.c-N.REGION.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+   ```
+   - Use the **Pooled connection** (host contains `-pooler`) — best for a web app with many
+     short-lived connections.
+   - **Copy it exactly**, including the `.c-N.` part of the host and all query params. That `.c-N.`
+     segment is Neon's routing host (sent via SNI); removing it causes `password authentication failed`.
+4. This whole string is your `DATABASE_URL` (used in step 2). The app already knows how to parse
+   Neon's URL format and connect over SSL.
+
+> The schema for this project has **already been applied** to the Neon database during setup,
+> so all tables exist. On deploy the app re-checks migrations and simply starts (no-op).
+> If you create a *new* Neon DB later, the app auto-applies migrations on first boot.
 
 ---
 
@@ -37,14 +49,14 @@ Do **not** commit the new key. (The *publishable* key `pk_...` is safe to be pub
 1. **New +** → **Web Service** → connect the **`MealTimes-Backend`** GitHub repo.
 2. Settings:
    - **Runtime / Language**: Render auto-detects the `Dockerfile` → choose **Docker**.
-   - **Region**: same region as the database.
-   - **Branch**: `main`
+   - **Region**: pick one close to your Neon region (e.g. **US East (Ohio/Virginia)** for Neon `us-east-1`) to keep DB latency low.
+   - **Branch**: `master`  *(the backend repo's default branch is `master`, not `main`)*
    - **Plan**: **Free**
 3. **Environment variables** (Advanced → Add Environment Variable):
 
    | Key | Value |
    |-----|-------|
-   | `DATABASE_URL` | *(paste the Internal Database URL from step 1)* |
+   | `DATABASE_URL` | *(paste the full Neon connection string from step 1, exactly as-is)* |
    | `AllowedOrigins` | `https://YOUR-APP.vercel.app` *(fill in after step 3; can edit later)* |
    | `JwtSettings__Key` | a long random string (≥ 32 chars) |
    | `JwtSettings__Issuer` | `MealTimesApi` |
