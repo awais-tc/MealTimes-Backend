@@ -5,6 +5,7 @@ using MealTimes.Core.Service;
 using MealTimes.Repository;
 using MealTimes.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Stripe;
@@ -12,6 +13,18 @@ using System.Text;
 using TheMealTimes.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Npgsql (PostgreSQL) maps DateTime to 'timestamp with time zone' and otherwise
+// requires UTC values. This legacy switch preserves the SQL Server-style behavior
+// (accepts unspecified/local DateTime), avoiding runtime errors after the migration.
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+// Render assigns the port to listen on via the PORT environment variable.
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
 
 // ---------- Add Services to the Container ----------
 
@@ -124,13 +137,18 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Optional CORS
+// CORS — allowed origins come from the "AllowedOrigins" config/env value
+// (comma-separated), falling back to the local Vite dev server.
+// On Render set:  AllowedOrigins = https://your-app.vercel.app
+var allowedOrigins = (builder.Configuration["AllowedOrigins"] ?? "http://localhost:5173")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173") // your Vite/React URL
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -140,15 +158,26 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ---------- Configure HTTP Request Pipeline ----------
-
-if (app.Environment.IsDevelopment())
+// Apply any pending EF Core migrations on startup so the database schema is
+// created/updated automatically on each deploy (no manual migration step needed).
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
 }
 
-app.UseHttpsRedirection();
+// ---------- Configure HTTP Request Pipeline ----------
+
+// Swagger enabled in all environments so the deployed API can be explored/tested.
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Render terminates TLS at its edge and forwards plain HTTP to the container,
+// so only redirect to HTTPS when running locally.
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowFrontend");
 

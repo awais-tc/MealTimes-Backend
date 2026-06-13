@@ -42,9 +42,38 @@ namespace MealTimes.Repository
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-J5IS95J\\SQLEXPRESS;Initial Catalog=MealTimes;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;")
-                    .LogTo(Console.WriteLine, LogLevel.Information); ;
+                // Resolve connection string from (in order): DATABASE_URL env var (Render),
+                // ConnectionStrings:DefaultConnection from config, then a local dev fallback.
+                var raw = Environment.GetEnvironmentVariable("DATABASE_URL")
+                          ?? _configuration?.GetConnectionString("DefaultConnection")
+                          ?? "Host=localhost;Port=5432;Database=MealTimes;Username=postgres;Password=postgres";
+
+                optionsBuilder.UseNpgsql(BuildNpgsqlConnectionString(raw))
+                    .LogTo(Console.WriteLine, LogLevel.Information);
             }
+        }
+
+        // Render exposes its Postgres connection string as a URL
+        // (postgres://user:pass@host:port/dbname). Npgsql expects key=value pairs,
+        // so convert it when we detect the URL form; otherwise pass it through.
+        public static string BuildNpgsqlConnectionString(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw)) return raw;
+            if (!raw.StartsWith("postgres://") && !raw.StartsWith("postgresql://")) return raw;
+
+            var uri = new Uri(raw);
+            var userInfo = uri.UserInfo.Split(':', 2);
+            var db = uri.AbsolutePath.TrimStart('/');
+            var builder = new Npgsql.NpgsqlConnectionStringBuilder
+            {
+                Host = uri.Host,
+                Port = uri.Port == -1 ? 5432 : uri.Port,
+                Username = Uri.UnescapeDataString(userInfo[0]),
+                Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
+                Database = db,
+                SslMode = Npgsql.SslMode.Require
+            };
+            return builder.ConnectionString;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

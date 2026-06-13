@@ -17,8 +17,13 @@ namespace MealTimes.Repository
                 .AddJsonFile("appsettings.Development.json")
                 .Build();
 
+            // Used only by EF tooling at design time (migrations). Reads DATABASE_URL if set,
+            // otherwise falls back to a local Postgres instance.
+            var raw = Environment.GetEnvironmentVariable("DATABASE_URL")
+                      ?? "Host=localhost;Port=5432;Database=MealTimes;Username=postgres;Password=postgres";
+
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-J5IS95J\\SQLEXPRESS;Initial Catalog=MealTimes;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;");
+            optionsBuilder.UseNpgsql(AppDbContext.BuildNpgsqlConnectionString(raw));
 
             return new AppDbContext(optionsBuilder.Options);
         }
